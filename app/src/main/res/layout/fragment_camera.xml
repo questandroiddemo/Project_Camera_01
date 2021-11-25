@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center">
+    android:layout_gravity="center"
+    tools:layout_editor_absoluteX="3dp"
+    tools:layout_editor_absoluteY="-8dp">
 
 
     <Button
@@ -19,7 +21,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:strokeColor="#0B0A0A"
-        app:strokeWidth="1dp"/>
+        app:strokeWidth="1dp" />
 
     <Button
         android:id="@+id/ffc"
@@ -27,13 +29,13 @@
         android:layout_height="51dp"
         android:layout_marginStart="52dp"
         android:layout_marginTop="20dp"
+        android:backgroundTint="#167FDC"
         android:drawableLeft="@drawable/ic_baseline_camera_front_24"
         android:text="FFC"
-        android:backgroundTint="#167FDC"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rvc"
         app:strokeColor="#0B0A0A"
-        app:strokeWidth="1dp"/>
+        app:strokeWidth="1dp" />
 
     <Button
         android:id="@+id/cargo"
@@ -41,13 +43,13 @@
         android:layout_height="51dp"
         android:layout_marginStart="52dp"
         android:layout_marginTop="20dp"
+        android:backgroundTint="#167FDC"
         android:drawableLeft="@drawable/ic_baseline_airport_shuttle_24"
         android:text="CARGO"
-        android:backgroundTint="#167FDC"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ffc"
         app:strokeColor="#0B0A0A"
-        app:strokeWidth="1dp"/>
+        app:strokeWidth="1dp" />
 
     <Button
         android:id="@+id/aux"
@@ -65,42 +67,54 @@
         app:strokeColor="#0B0A0A"
         app:strokeWidth="1dp" />
 
-    <VideoView
-        android:id="@+id/videoView"
-        android:layout_width="321dp"
-        android:layout_height="192dp"
-        android:background="#167FDC"
-        android:foregroundTint="#090808"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.824"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.397"
-        app:strokeColor="#070707"
-        app:strokeWidth="2dp" />
 
     <TextView
         android:id="@+id/title"
-        android:layout_width="65dp"
-        android:layout_height="26dp"
+        android:layout_width="325dp"
+        android:layout_height="30dp"
+        android:gravity="center"
         android:text="Tittle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.686"
+        app:layout_constraintHorizontal_bias="0.694"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.064" />
+        app:layout_constraintVertical_bias="0.094" />
+
+    <TextureView
+        android:id="@+id/textureView"
+        android:layout_width="438dp"
+        android:layout_height="187dp"
+        android:layout_marginTop="84dp"
+        android:orientation="horizontal"
+        android:layout_marginEnd="64dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/helptext"
-        android:layout_width="78dp"
-        android:layout_height="29dp"
+        android:layout_width="325dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="124dp"
+        android:gravity="center"
         android:text="Help Text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.699"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/videoView"
-        app:layout_constraintVertical_bias="0.191" />
+        app:layout_constraintTop_toBottomOf="@+id/textureView"
+        app:layout_constraintVertical_bias="0.215" />
+
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="438dp"
+        android:layout_height="187dp"
+        android:layout_marginTop="84dp"
+        android:orientation="horizontal"
+        android:layout_marginEnd="64dp"
+        app:layout_constraintBottom_toTopOf="@+id/helptext"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

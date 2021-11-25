@@ -8,11 +8,11 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import java.util.ArrayList;
 
-public class VPAdapter extends FragmentPagerAdapter {
+public class VpAdapter extends FragmentPagerAdapter {
     private final ArrayList<Fragment> fragmentArrayList= new ArrayList<>();
     private final ArrayList<String> fragmentTitle =new ArrayList<>();
 
-    public VPAdapter(@NonNull FragmentManager fm, int behavior) {
+    public VpAdapter(@NonNull FragmentManager fm, int behavior) {
         super(fm, behavior);
     }
 
