@@ -22,6 +22,7 @@ import android.hardware.camera2.CameraDevice;
 import android.hardware.camera2.CameraManager;
 import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.params.StreamConfigurationMap;
+import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -31,6 +32,7 @@ import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
@@ -42,6 +44,8 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -57,13 +61,15 @@ import java.util.List;
 
 public class CameraFragment extends Fragment implements View.OnClickListener {
     Button rvc, ffc, cargo, aux;
-    TextView mTitle, mHelptext;
+    TextView mTitle, mHelptext;//
     View v;
     private static final int REQUEST_CAMERA_PERMISSION_RESULT = 0;
     private TextureView mTextureView;
     private CameraDevice mCameraDevice;
     private CaptureRequest.Builder mCaptureRequestBuilder;
     private FrameLayout frameLayout;
+    public static String ROTATE;
+
 
     /**
      * @Brief Fragment lifecycle method onCreateView
@@ -94,7 +100,9 @@ public class CameraFragment extends Fragment implements View.OnClickListener {
         cargo.setOnClickListener(this);
         aux.setOnClickListener(this);
         mTextureView = (TextureView) view.findViewById(R.id.textureView);
+        mTextureView.setRotation(-90);
         frameLayout = view.findViewById(R.id.frameLayout);
+        frameLayout.setRotation(-90);
 
 
         return view;
@@ -116,6 +124,16 @@ public class CameraFragment extends Fragment implements View.OnClickListener {
                 cargo.setBackgroundColor(getResources().getColor(R.color.primary));
                 aux.setBackgroundColor(getResources().getColor(R.color.primary));
                 frameLayout.setBackground(null);
+                ROTATE = "null";
+                if (mTextureView.isAvailable()) {
+                    setupCamera(mTextureView.getWidth(), mTextureView.getHeight());
+                    connectCamera("1");
+                    Toast.makeText(getContext(), "camera "+mCameraId+"  connected", Toast.LENGTH_SHORT).show();
+
+
+                } else {
+                    mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
+                }
 
                 break;
             case R.id.ffc:
@@ -126,6 +144,17 @@ public class CameraFragment extends Fragment implements View.OnClickListener {
                 cargo.setBackgroundColor(getResources().getColor(R.color.primary));
                 aux.setBackgroundColor(getResources().getColor(R.color.primary));
                 frameLayout.setBackground(null);
+                ROTATE = "fulfilled";
+                if (mTextureView.isAvailable()) {
+                    setupCamera(mTextureView.getWidth(), mTextureView.getHeight());
+
+                    connectCamera("0");
+                    Toast.makeText(getContext(), "camera "+mCameraId+"  connected", Toast.LENGTH_SHORT).show();
+                } else {
+                    mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
+
+                }
+
                 break;
             case R.id.cargo:
                 mTitle.setText("CARGO CAMERA");
@@ -134,6 +163,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener {
                 ffc.setBackgroundColor(getResources().getColor(R.color.primary));
                 cargo.setBackgroundColor(getResources().getColor(R.color.primary2));
                 aux.setBackgroundColor(getResources().getColor(R.color.primary));
+                closeCamera();
                 mTextureView.setOpaque(false);
                 frameLayout.setBackgroundColor(Color.BLUE);
                 break;
@@ -145,6 +175,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener {
                 cargo.setBackgroundColor(getResources().getColor(R.color.primary));
                 aux.setBackgroundColor(getResources().getColor(R.color.primary2));
                 mTextureView.setOpaque(false);
+                closeCamera();
                 frameLayout.setBackgroundColor(Color.BLUE);
                 break;
 
@@ -156,12 +187,19 @@ public class CameraFragment extends Fragment implements View.OnClickListener {
      *
      */
 
+
     private TextureView.SurfaceTextureListener mSurfaceTextureListener = new TextureView.SurfaceTextureListener() {
+
+        /**
+         *  @brief : Invoked when a TextureView's SurfaceTexture is ready for use.
+         *  @param surfaceTexture : SurfaceTexture
+         *                      i : integer
+         *                      i1 : integer
+         */
+
         @Override
         public void onSurfaceTextureAvailable(@NonNull SurfaceTexture surfaceTexture, int i, int i1) {
             setupCamera(i, i1);
-            connectCamera();
-
 
         }
 
@@ -180,12 +218,14 @@ public class CameraFragment extends Fragment implements View.OnClickListener {
 
         }
     };
+
+
     private CameraDevice.StateCallback mCameraDeviceStateCallback = new CameraDevice.StateCallback() {
         @Override
         public void onOpened(@NonNull CameraDevice cameraDevice) {
             mCameraDevice = cameraDevice;
             startPreview();
-            mTitle.setText("REAR VIEW CAMERA");
+//            mTitle.setText("REAR VIEW CAMERA");
             mHelptext.setText("Check entire Surroundings.");
             Toast.makeText(getContext(), "Camera connected!", Toast.LENGTH_LONG).show();
 
@@ -205,6 +245,8 @@ public class CameraFragment extends Fragment implements View.OnClickListener {
 
         }
     };
+
+
     private static SparseIntArray ORIENTATIONS = new SparseIntArray();
 
     static {
@@ -231,6 +273,11 @@ public class CameraFragment extends Fragment implements View.OnClickListener {
         return (sensorOrientation + deviceOrientation + 360) % 360;
     }
 
+
+    /**
+     *  @brief : function used to pause the application
+     *
+     */
     @Override
     public void onPause() {
         super.onPause();
@@ -240,6 +287,10 @@ public class CameraFragment extends Fragment implements View.OnClickListener {
 
     }
 
+    /**
+     *  @brief : function used to close the camera.
+     *
+     */
     private void closeCamera() {
         if (mCameraDevice != null) {
             mCameraDevice.close();
@@ -260,75 +311,69 @@ public class CameraFragment extends Fragment implements View.OnClickListener {
 
         super.onResume();
         startBackgroundThread();
-
-        if (mTextureView.isAvailable()) {
-            setupCamera(mTextureView.getWidth(), mTextureView.getHeight());
-            connectCamera();
-        } else {
-            mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
-        }
+//
+//        if (mTextureView.isAvailable()) {
+//            setupCamera(mTextureView.getWidth(), mTextureView.getHeight());
+//            connectCamera("0");
+//        } else {
+//            mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
+//        }
     }
 
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.getActivity().onWindowFocusChanged(hasFocus);
-        View decorView = getActivity().getWindow().getDecorView();
-        if (hasFocus) {
-            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-        }
-    }
 
+
+
+    /**
+     *  @brief : function used to setting up the camera for both back and front based on the camera id with specific width and height.
+     *           ( "0" for front camera
+     *             "1" for back camera)
+     * @param : width : integer
+     *          height : integer
+     *
+     *
+     *
+     */
     private void setupCamera(int width, int height) {
         CameraManager cameraManager = (CameraManager) getActivity().getSystemService(Context.CAMERA_SERVICE);
         try {
-            for (String cameraId : cameraManager.getCameraIdList()) {
-                CameraCharacteristics cameraCharacteristics = cameraManager.getCameraCharacteristics(cameraId);
-                if (cameraCharacteristics.get(cameraCharacteristics.LENS_FACING) ==
-                        CameraCharacteristics.LENS_FACING_FRONT) {
-                    continue;
-                }
-                StreamConfigurationMap map = cameraCharacteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
-                int deviceOrientation = getActivity().getWindowManager().getDefaultDisplay().getRotation();
-                int totalRotation = sensorToDeviceRotation(cameraCharacteristics, deviceOrientation);
-                boolean swapRotation = totalRotation == 90 || totalRotation == 270;
-                int rotatedWidth = width;
-                int rotatedHeight = height;
-                if (swapRotation) {
-                    rotatedWidth = height;
-                    rotatedHeight = width;
-                }
-                mPreviewSize = chooseOptimalSize(map.getOutputSizes(SurfaceTexture.class), rotatedWidth, rotatedHeight);
+
+//            for (String cameraId : cameraManager.getCameraIdList()) {
+            String cameraId = "0";
+
+            CameraCharacteristics cameraCharacteristics = cameraManager.getCameraCharacteristics(cameraId);
+            StreamConfigurationMap map = cameraCharacteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
+            int rotatedWidth = width;
+            int rotatedHeight = height;
+            mPreviewSize = chooseOptimalSize(map.getOutputSizes(SurfaceTexture.class), rotatedWidth, rotatedHeight);
+
+
+            if (ROTATE == null){
+                cameraId = cameraManager.getCameraIdList()[1];
                 mCameraId = cameraId;
-                return;
+                closeCamera();
+
             }
+            else {
+                cameraId = cameraManager.getCameraIdList()[0];
+                mCameraId = cameraId;
+                ROTATE = null;
+                closeCamera();
+            }
+
+            return;
+
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
-
-
-
     }
 
-    private Size chooseOptimalSize(Size[] choices, int width, int height) {
-        List<Size> bigEnough = new ArrayList<Size>();
-        for(Size option : choices){
-            if(option.getHeight() == option.getWidth() * height/width &&
-                    option.getWidth() >= width && option.getHeight() >= height) {
-                bigEnough.add(option);
-            }
-        }
-        if(bigEnough.size() > 0){
-            return Collections.min(bigEnough, new CompareSizeByArea());
-        } else {
-            return choices[0];
-        }
-    }
 
-    private void connectCamera () {
+    /**
+     *  @brief : function used to connecting the camera
+     * @param  mCameraId : camera Id ("0" or "1")
+     *
+     */
+    private void connectCamera (String mCameraId) {
         CameraManager cameraManager = (CameraManager) getActivity().getSystemService(Context.CAMERA_SERVICE);
         try {
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
@@ -347,6 +392,12 @@ public class CameraFragment extends Fragment implements View.OnClickListener {
             e.printStackTrace();
         }
     }
+
+
+    /**
+     *  @brief : function used to start the camera preview which will be displayed on the textureview.
+     *
+     */
     private void startPreview() {
         SurfaceTexture surfaceTexture = mTextureView.getSurfaceTexture();
         surfaceTexture.setDefaultBufferSize(mPreviewSize.getWidth(), mPreviewSize.getHeight());
@@ -369,21 +420,33 @@ public class CameraFragment extends Fragment implements View.OnClickListener {
                         @Override
                         public void onConfigureFailed(@NonNull CameraCaptureSession cameraCaptureSession) {
                             Toast.makeText(getActivity(), "Unable to connect to camera", Toast.LENGTH_LONG).show();
+
                         }
 
-                        },null);
-                    }catch (CameraAccessException e){
+                    },null);
+        }catch (CameraAccessException e){
             e.printStackTrace();
         }
 
+    }
 
 
-        }
+
+    /**
+     *  @brief : function used to start the background thread.
+     *
+     *
+     */
     private void startBackgroundThread() {
         mBackgroundHandlerThread = new HandlerThread("PROJETDILEMMA");
         mBackgroundHandlerThread.start();
         mBackgroundHandler = new Handler(mBackgroundHandlerThread.getLooper());
     }
+
+
+    /**
+     *  @brief : function used to stop the background thread.
+     */
     private void stopBackgroundThread(){
         mBackgroundHandlerThread.quitSafely();
         try {
@@ -392,6 +455,23 @@ public class CameraFragment extends Fragment implements View.OnClickListener {
             mBackgroundHandler = null;
         } catch (InterruptedException e){
             e.printStackTrace();
+        }
+    }
+
+
+
+    private Size chooseOptimalSize(Size[] choices, int width, int height) {
+        List<Size> bigEnough = new ArrayList<Size>();
+        for(Size option : choices){
+            if(option.getHeight() == option.getWidth() * height/width &&
+                    option.getWidth() >= width && option.getHeight() >= height) {
+                bigEnough.add(option);
+            }
+        }
+        if(bigEnough.size() > 0){
+            return Collections.min(bigEnough, new CompareSizeByArea());
+        } else {
+            return choices[0];
         }
     }
 

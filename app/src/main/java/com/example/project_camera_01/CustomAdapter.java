@@ -69,4 +69,5 @@ public class CustomAdapter extends ArrayAdapter {
 
         return result;
     }
+
 }

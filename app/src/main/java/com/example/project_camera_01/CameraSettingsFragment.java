@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -52,11 +53,14 @@ public class CameraSettingsFragment extends Fragment {
 
     ArrayList dataModels;
     ListView listView;
+
+
     private CustomAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -94,4 +98,5 @@ public class CameraSettingsFragment extends Fragment {
         });
         return rootView;
     }
+
 }
