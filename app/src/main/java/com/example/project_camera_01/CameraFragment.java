@@ -59,7 +59,7 @@ import java.util.List;
  */
 
 
-public class CameraFragment extends Fragment implements View.OnClickListener {
+public class CameraFragment extends Fragment implements View.OnClickListener,DataModel.view{
     Button rvc, ffc, cargo, aux;
     TextView mTitle, mHelptext;//
     View v;
@@ -134,6 +134,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener {
                 } else {
                     mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
                 }
+                getCameraView(1,1);
 
                 break;
             case R.id.ffc:
@@ -254,6 +255,12 @@ public class CameraFragment extends Fragment implements View.OnClickListener {
         ORIENTATIONS.append(Surface.ROTATION_90, 90);
         ORIENTATIONS.append(Surface.ROTATION_180, 180);
         ORIENTATIONS.append(Surface.ROTATION_270, 270);
+    }
+
+    @Override
+    public void getCameraView(int i, int i1) {
+        Toast.makeText(getContext(), "Current Camera "+i, Toast.LENGTH_SHORT).show();
+
     }
 
     private static class CompareSizeByArea implements Comparator<Size> {

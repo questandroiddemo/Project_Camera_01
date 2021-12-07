@@ -6,15 +6,21 @@
  */
 package com.example.project_camera_01;
 
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.os.IBinder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
 
@@ -35,11 +41,14 @@ public class MainFragment extends Fragment {
      * @param savedInstanceState :  Object of Bundle
      * @return
      */
-
+    IMyAidlInterface iMyAidlInterface;
+    Boolean connected=true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+
         // Inflate the layout for this fragment
 
         v=inflater.inflate(R.layout.fragment_main, container, false);
@@ -53,6 +62,29 @@ public class MainFragment extends Fragment {
         vpAdapter.addFragment(new CameraFragment(),"Camera");
         vpAdapter.addFragment(new CameraSettingsFragment(),"Camera settings");
         viewPager.setAdapter(vpAdapter);
+        Intent intent = new Intent("com.example.myservice_camera.AIDL");
+
+        intent.setClassName("com.example.myservice_camera",
+                "com.example.myservice_camera.MyService");
+        if(getActivity().getBaseContext().getApplicationContext().bindService(intent, serviceCon, Context.BIND_AUTO_CREATE)){
+            connected=true;
+            Toast.makeText(getContext(), "BindServiceSuccess", Toast.LENGTH_SHORT).show();
+        }else
+            Toast.makeText(getContext(), "BindServiceFailed", Toast.LENGTH_SHORT).show();
         return v;
+
+
     }
+    private final ServiceConnection serviceCon=new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            iMyAidlInterface = IMyAidlInterface.Stub.asInterface(iBinder);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+
+        }
+    };
 }

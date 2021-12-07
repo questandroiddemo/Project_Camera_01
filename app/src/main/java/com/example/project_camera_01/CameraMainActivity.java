@@ -31,8 +31,7 @@ public class CameraMainActivity extends AppCompatActivity {
      * @brief Android life cycle function
      * @param savedInstanceState : object of Bundle
      */
-    IMyAidlInterface iMyAidlInterface;
-    Boolean connected=true;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,15 +43,6 @@ public class CameraMainActivity extends AppCompatActivity {
                     .add(android.R.id.content, new MainFragment())
                     .commit();
         }
-        Intent intent = new Intent("com.example.CameraService.AIDL");
-
-        intent.setClassName("com.example.CameraService",
-                "com.example.CameraService");
-        if(getBaseContext().getApplicationContext().bindService(intent, serviceCon, Context.BIND_AUTO_CREATE)){
-            connected=true;
-            Toast.makeText(getApplicationContext(), "BindServiceSuccess", Toast.LENGTH_SHORT).show();
-        }else
-            Toast.makeText(getApplicationContext(), "BindServiceFailed", Toast.LENGTH_SHORT).show();
 
 
     }
@@ -61,18 +51,18 @@ public class CameraMainActivity extends AppCompatActivity {
 
 
 
-    private final ServiceConnection serviceCon=new ServiceConnection() {
-
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            iMyAidlInterface = IMyAidlInterface.Stub.asInterface(iBinder);
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-
-        }
-    };
+//    private final ServiceConnection serviceCon=new ServiceConnection() {
+//
+////        @Override
+////        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+////            iMyAidlInterface = IMyAidlInterface.Stub.asInterface(iBinder);
+////        }
+//
+//        @Override
+//        public void onServiceDisconnected(ComponentName componentName) {
+//
+//        }
+//    };
 
 
 }
