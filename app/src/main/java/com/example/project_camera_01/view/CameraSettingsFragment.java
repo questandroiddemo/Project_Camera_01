@@ -1,4 +1,4 @@
-package com.example.project_camera_01;
+package com.example.project_camera_01.view;
 
 import android.os.Bundle;
 
@@ -8,8 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.CheckBox;
 import android.widget.ListView;
+
+import com.example.project_camera_01.CustomAdapter;
+import com.example.project_camera_01.DataModel;
+import com.example.project_camera_01.R;
 
 import java.util.ArrayList;
 

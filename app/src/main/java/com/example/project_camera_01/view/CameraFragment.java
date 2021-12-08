@@ -5,16 +5,13 @@
  * @author Adhithya K C,Ann Jojo,Edwin Jaison C
  */
 
-package com.example.project_camera_01;
+package com.example.project_camera_01.view;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.graphics.Camera;
 import android.graphics.Color;
 import android.graphics.SurfaceTexture;
-import android.graphics.drawable.Drawable;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
 import android.hardware.camera2.CameraCharacteristics;
@@ -22,7 +19,6 @@ import android.hardware.camera2.CameraDevice;
 import android.hardware.camera2.CameraManager;
 import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.params.StreamConfigurationMap;
-import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -32,7 +28,6 @@ import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
@@ -45,7 +40,8 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.tabs.TabLayout;
+import com.example.project_camera_01.R;
+import com.example.project_camera_01.presenter.ICameraPresenter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,10 +55,20 @@ import java.util.List;
  */
 
 
-public class CameraFragment extends Fragment implements View.OnClickListener,DataModel.view{
+public class CameraFragment extends Fragment implements View.OnClickListener{
     Button rvc, ffc, cargo, aux;
     TextView mTitle, mHelptext;//
     View v;
+
+
+
+    ICameraPresenter iCameraPresenter;
+    int status;
+
+
+
+
+
     private static final int REQUEST_CAMERA_PERMISSION_RESULT = 0;
     private TextureView mTextureView;
     private CameraDevice mCameraDevice;
@@ -134,7 +140,8 @@ public class CameraFragment extends Fragment implements View.OnClickListener,Dat
                 } else {
                     mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
                 }
-                getCameraView(1,1);
+
+
 
                 break;
             case R.id.ffc:
@@ -155,6 +162,9 @@ public class CameraFragment extends Fragment implements View.OnClickListener,Dat
                     mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
 
                 }
+
+//                int s = updateBindStatus(1);
+
 
                 break;
             case R.id.cargo:
@@ -257,11 +267,17 @@ public class CameraFragment extends Fragment implements View.OnClickListener,Dat
         ORIENTATIONS.append(Surface.ROTATION_270, 270);
     }
 
-    @Override
-    public void getCameraView(int i, int i1) {
-        Toast.makeText(getContext(), "Current Camera "+i, Toast.LENGTH_SHORT).show();
+//    @Override
+//    public int updateBindStatus(int bindStatus) {
+//
+//
+//        int status = iCameraPresenter.getstatus();
+//        mTitle.setText(status);
+//        return 0;
+//
+//
+//    }
 
-    }
 
     private static class CompareSizeByArea implements Comparator<Size> {
 

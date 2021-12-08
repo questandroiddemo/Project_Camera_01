@@ -4,7 +4,7 @@
  * @copyright COPYRIGHT (C) 2018 MITSUBISHI ELECTRIC CORPORATION ALL RIGHTS RESERVED
  * @author Adhithya K C,Ann Jojo,Edwin Jaison C
  */
-package com.example.project_camera_01;
+package com.example.project_camera_01.view;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -22,6 +22,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.project_camera_01.IMyAidlInterface;
+import com.example.project_camera_01.R;
+import com.example.project_camera_01.VpAdapter;
 import com.google.android.material.tabs.TabLayout;
 
 /**
