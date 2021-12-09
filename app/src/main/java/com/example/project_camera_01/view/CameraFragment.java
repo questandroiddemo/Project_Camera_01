@@ -7,6 +7,8 @@
 
 package com.example.project_camera_01.view;
 
+
+
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -59,6 +61,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener{
     Button rvc, ffc, cargo, aux;
     TextView mTitle, mHelptext;//
     View v;
+
 
 
 
@@ -140,6 +143,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener{
                 } else {
                     mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
                 }
+
 
 
 
@@ -266,6 +270,8 @@ public class CameraFragment extends Fragment implements View.OnClickListener{
         ORIENTATIONS.append(Surface.ROTATION_180, 180);
         ORIENTATIONS.append(Surface.ROTATION_270, 270);
     }
+
+
 
 //    @Override
 //    public int updateBindStatus(int bindStatus) {
