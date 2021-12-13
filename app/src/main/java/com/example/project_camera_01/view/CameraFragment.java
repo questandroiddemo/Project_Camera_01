@@ -30,6 +30,7 @@ import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
@@ -43,6 +44,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.project_camera_01.R;
+import com.example.project_camera_01.presenter.CameraPresenter;
 import com.example.project_camera_01.presenter.ICameraPresenter;
 
 import java.util.ArrayList;
@@ -50,6 +52,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import static com.example.project_camera_01.common.CameraConstants.BIND_FAIL;
+import static com.example.project_camera_01.common.CameraConstants.BIND_SUCCESS;
+import static com.example.project_camera_01.common.CameraConstants.TAG;
+import android.nfc.Tag;
 /**
  * @brief Implementation for CameraFragment class.
  * CameraFragment is the first fragment of the application which extends Fragment.
@@ -57,15 +63,17 @@ import java.util.List;
  */
 
 
-public class CameraFragment extends Fragment implements View.OnClickListener{
-    Button rvc, ffc, cargo, aux;
+public class CameraFragment extends Fragment implements View.OnClickListener,ICameraView{
+    public Button rvc, ffc, cargo, aux;
     TextView mTitle, mHelptext;//
     View v;
 
 
 
 
+    CameraPresenter camerapresenter;
     ICameraPresenter iCameraPresenter;
+    private ICameraPresenter mCameraPresenter;
     int status;
 
 
@@ -113,6 +121,13 @@ public class CameraFragment extends Fragment implements View.OnClickListener{
         frameLayout = view.findViewById(R.id.frameLayout);
         frameLayout.setRotation(-90);
 
+        camerapresenter=new CameraPresenter(this);
+        mCameraPresenter = new CameraPresenter(this);
+
+
+
+
+
 
         return view;
     }
@@ -143,6 +158,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener{
                 } else {
                     mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
                 }
+                mCameraPresenter.updateBindStatus(1);
 
 
 
@@ -271,6 +287,20 @@ public class CameraFragment extends Fragment implements View.OnClickListener{
         ORIENTATIONS.append(Surface.ROTATION_270, 270);
     }
 
+    @Override
+    public void updateBindStatus(int bindStatus) {
+
+        if (bindStatus == BIND_SUCCESS) {
+            Toast.makeText(getContext(), "BIND SUCCESS", Toast.LENGTH_LONG).show();
+            String previousCamera = mCameraPresenter.getPreviousActiveCamera();
+            mTitle.setText(previousCamera);
+            Log.d(TAG,"updateBindStatus:"+previousCamera);
+        }
+        else {
+            Toast.makeText(getContext(), "BIND Failed", Toast.LENGTH_LONG).show();
+        }
+
+    }
 
 
 //    @Override
