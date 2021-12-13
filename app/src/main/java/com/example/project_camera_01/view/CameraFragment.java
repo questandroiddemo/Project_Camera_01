@@ -63,7 +63,7 @@ import android.nfc.Tag;
  */
 
 
-public class CameraFragment extends Fragment implements View.OnClickListener,ICameraView{
+public class CameraFragment extends Fragment implements View.OnClickListener{
     public Button rvc, ffc, cargo, aux;
     TextView mTitle, mHelptext;//
     View v;
@@ -71,10 +71,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener,ICa
 
 
 
-    CameraPresenter camerapresenter;
-    ICameraPresenter iCameraPresenter;
-    private ICameraPresenter mCameraPresenter;
-    int status;
+
 
 
 
@@ -121,8 +118,8 @@ public class CameraFragment extends Fragment implements View.OnClickListener,ICa
         frameLayout = view.findViewById(R.id.frameLayout);
         frameLayout.setRotation(-90);
 
-        camerapresenter=new CameraPresenter(this);
-        mCameraPresenter = new CameraPresenter(this);
+
+
 
 
 
@@ -158,7 +155,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener,ICa
                 } else {
                     mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
                 }
-                mCameraPresenter.updateBindStatus(1);
+
 
 
 
@@ -287,20 +284,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener,ICa
         ORIENTATIONS.append(Surface.ROTATION_270, 270);
     }
 
-    @Override
-    public void updateBindStatus(int bindStatus) {
 
-        if (bindStatus == BIND_SUCCESS) {
-            Toast.makeText(getContext(), "BIND SUCCESS", Toast.LENGTH_LONG).show();
-            String previousCamera = mCameraPresenter.getPreviousActiveCamera();
-            mTitle.setText(previousCamera);
-            Log.d(TAG,"updateBindStatus:"+previousCamera);
-        }
-        else {
-            Toast.makeText(getContext(), "BIND Failed", Toast.LENGTH_LONG).show();
-        }
-
-    }
 
 
 //    @Override

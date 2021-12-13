@@ -61,6 +61,7 @@ public class CameraModel implements ICameraModel {
         } catch (RemoteException e) {
             e.printStackTrace();
         }
-        Log.d(TAG,"getPreviousActiveCamera:"+camera);    return camera;
+        Log.d(TAG,"getPreviousActiveCamera:"+camera);
+        return camera;
     }
 }
