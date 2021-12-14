@@ -1,3 +1,4 @@
 include ':app'
 rootProject.name = "Project_Camera_01"
 include ':cameraserviceinterface'
+project(":cameraserviceinterface").projectDir = new File(settingsDir, "../MyServiceDemo/cameraserviceinterface")
