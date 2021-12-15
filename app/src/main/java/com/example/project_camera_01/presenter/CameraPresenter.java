@@ -27,6 +27,8 @@ public class CameraPresenter implements ICameraPresenter{
     @Override
     public void updateBindStatus(int bindStatus) {
         mCameraView.updateBindStatus(bindStatus);
+        Log.d("CameraService","OnStart");
+
 
     }
 

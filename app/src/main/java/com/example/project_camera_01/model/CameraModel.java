@@ -30,6 +30,8 @@ public class CameraModel implements ICameraModel {
 
             mServiceCameraInterface = mCameraServiceInterface.getCameraInterface();
             mCameraPresenter.updateBindStatus(BIND_SUCCESS);
+            Log.d("CameraService","OnConnect");
+
         }
 
         @Override

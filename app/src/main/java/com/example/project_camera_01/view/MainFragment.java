@@ -91,7 +91,8 @@ public class MainFragment extends Fragment implements  ICameraView{
             Toast.makeText(getContext(), "BIND SUCCESS", Toast.LENGTH_LONG).show();
             String previousCamera = mCameraPresenter.getPreviousActiveCamera();
             Toast.makeText(getContext()," "+previousCamera,Toast.LENGTH_LONG).show();
-            Log.d(TAG,"updateBindStatus:"+previousCamera);
+            Log.d("CameraService","OnBind");
+
         }
         else {
             Toast.makeText(getContext(), "BIND Failed", Toast.LENGTH_LONG).show();
