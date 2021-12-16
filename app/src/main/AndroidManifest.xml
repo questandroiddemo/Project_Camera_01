@@ -3,6 +3,8 @@
     package="com.example.project_camera_01">
 
     <uses-permission android:name="android.permission.CAMERA"/>
+
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -14,7 +16,8 @@
         <activity
             android:name=".CameraMainActivity"
             android:configChanges="orientation"
-            android:screenOrientation= "landscape">
+            android:screenOrientation= "landscape"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

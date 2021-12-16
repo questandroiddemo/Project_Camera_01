@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.project_camera_01.IMyAidlInterface;
@@ -75,6 +76,8 @@ public class MainFragment extends Fragment implements  ICameraView{
         vpAdapter.addFragment(new CameraFragment(),"Camera");
         vpAdapter.addFragment(new CameraSettingsFragment(),"Camera settings");
         viewPager.setAdapter(vpAdapter);
+//        TextView textView= v.findViewById(R.id.textView);
+
 
 
 
@@ -86,12 +89,15 @@ public class MainFragment extends Fragment implements  ICameraView{
 
     @Override
     public void updateBindStatus(int bindStatus) {
+
 //        Toast.makeText(getContext(),"HAI",Toast.LENGTH_LONG).show();
         if (bindStatus == BIND_SUCCESS) {
             Toast.makeText(getContext(), "BIND SUCCESS", Toast.LENGTH_LONG).show();
             String previousCamera = mCameraPresenter.getPreviousActiveCamera();
-            Toast.makeText(getContext()," "+previousCamera,Toast.LENGTH_LONG).show();
+//            Toast.makeText(getContext()," "+previousCamera,Toast.LENGTH_LONG).show();
             Log.d("CameraService","OnBind");
+//            textView.setText("Hey, one more TextView");
+
 
         }
         else {
