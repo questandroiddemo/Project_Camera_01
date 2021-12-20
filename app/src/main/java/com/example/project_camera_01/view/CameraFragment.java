@@ -7,6 +7,13 @@
 
 package com.example.project_camera_01.view;
 
+/**
+ * @file CameraFragment.java
+ * @brief CameraFragment is the first fragment which displays camera preview
+ * @copyright COPYRIGHT (C) 2018 MITSUBISHI ELECTRIC CORPORATION ALL RIGHTS RESERVED
+ * @author Adhithya K C,Ann Jojo,Edwin Jaison C
+ */
+
 
 
 import android.Manifest;
@@ -30,7 +37,6 @@ import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
@@ -44,7 +50,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.project_camera_01.R;
-import com.example.project_camera_01.presenter.CameraPresenter;
 import com.example.project_camera_01.presenter.ICameraPresenter;
 
 import java.util.ArrayList;
@@ -52,10 +57,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import static com.example.project_camera_01.common.CameraConstants.BIND_FAIL;
-import static com.example.project_camera_01.common.CameraConstants.BIND_SUCCESS;
-import static com.example.project_camera_01.common.CameraConstants.TAG;
-import android.nfc.Tag;
+
 /**
  * @brief Implementation for CameraFragment class.
  * CameraFragment is the first fragment of the application which extends Fragment.
@@ -64,25 +66,77 @@ import android.nfc.Tag;
 
 
 public class CameraFragment extends Fragment implements View.OnClickListener{
-    public Button rvc, ffc, cargo, aux;
-    TextView mTitle, mHelptext;//
-    View v;
 
 
-
-
-
-
-
-
-
-
+    /**
+     * variable to store the value of request code.
+     */
     private static final int REQUEST_CAMERA_PERMISSION_RESULT = 0;
+
+    /**
+     * variables to store the object for Buttons.
+     */
+    Button mRvc, mFfc, mCargo, mAux;
+
+    /**
+     * variable to store the object of title and helptext.
+     */
+    TextView mTitle, mHelptext;//
+
+    /**
+     * variable to store Textureview object.
+     */
     private TextureView mTextureView;
+
+    /**
+     * variable to store CameraDivice object.
+     */
+
     private CameraDevice mCameraDevice;
+
+    /**
+     * variable to store the value of capture request builder.
+     */
     private CaptureRequest.Builder mCaptureRequestBuilder;
-    private FrameLayout frameLayout;
-    public static String ROTATE;
+
+    /**
+     * variable to store Framelayout object
+     */
+    private FrameLayout mFrameLayout;
+
+
+    /**
+     * variable to store Handler Thread object.
+     */
+
+    private HandlerThread mBackgroundHandlerThread;
+
+
+    /**
+     * variable to store Handler object.
+     */
+    private Handler mBackgroundHandler;
+
+
+    /**
+     * variable to store cameraid object
+     */
+    private String mCameraId;
+
+
+    /**
+     * variable to store preview size.
+     */
+
+    private Size mPreviewSize;
+
+
+    /**
+     * variable to store a value which is used for specifying the camera (front and back) based on its value.
+     */
+    public static String mRotate;
+
+    private ICameraPresenter mCameraPresenter;
 
 
     /**
@@ -99,34 +153,31 @@ public class CameraFragment extends Fragment implements View.OnClickListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_camera, container, false);
+        /**
+         * variable to store view.
+         */
+        View mView = inflater.inflate(R.layout.fragment_camera, container, false);
 
 
 
-        mTitle = view.findViewById(R.id.title);
-        mHelptext = view.findViewById(R.id.helptext);
-        rvc = view.findViewById(R.id.rvc);
-        ffc = view.findViewById(R.id.ffc);
-        cargo = view.findViewById(R.id.cargo);
-        aux = view.findViewById(R.id.aux);
-        rvc.setOnClickListener(this);
-        ffc.setOnClickListener(this);
-        cargo.setOnClickListener(this);
-        aux.setOnClickListener(this);
-        mTextureView = (TextureView) view.findViewById(R.id.textureView);
+        mTitle = mView.findViewById(R.id.title);
+        mHelptext = mView.findViewById(R.id.helptext);
+        mRvc = mView.findViewById(R.id.rvc);
+        mFfc = mView.findViewById(R.id.ffc);
+        mCargo = mView.findViewById(R.id.cargo);
+        mAux = mView.findViewById(R.id.aux);
+        mRvc.setOnClickListener(this);
+        mFfc.setOnClickListener(this);
+        mCargo.setOnClickListener(this);
+        mAux.setOnClickListener(this);
+        mTextureView = (TextureView) mView.findViewById(R.id.textureView);
         mTextureView.setRotation(-90);
-        frameLayout = view.findViewById(R.id.frameLayout);
-        frameLayout.setRotation(-90);
+        mFrameLayout = mView.findViewById(R.id.frameLayout);
+        mFrameLayout.setRotation(-90);
 
 
 
-
-
-
-
-
-
-        return view;
+        return mView;
     }
 
     /**
@@ -140,12 +191,12 @@ public class CameraFragment extends Fragment implements View.OnClickListener{
             case R.id.rvc:
                 mTitle.setText("REAR VIEW CAMERA");
                 mHelptext.setText("Check entire Surrondings.");
-                rvc.setBackgroundColor(getResources().getColor(R.color.primary1));
-                ffc.setBackgroundColor(getResources().getColor(R.color.primary));
-                cargo.setBackgroundColor(getResources().getColor(R.color.primary));
-                aux.setBackgroundColor(getResources().getColor(R.color.primary));
-                frameLayout.setBackground(null);
-                ROTATE = "null";
+                mRvc.setBackgroundColor(getResources().getColor(R.color.primary1));
+                mFfc.setBackgroundColor(getResources().getColor(R.color.primary));
+                mCargo.setBackgroundColor(getResources().getColor(R.color.primary));
+                mAux.setBackgroundColor(getResources().getColor(R.color.primary));
+                mFrameLayout.setBackground(null);
+                mRotate = "null";
                 if (mTextureView.isAvailable()) {
                     setupCamera(mTextureView.getWidth(), mTextureView.getHeight());
                     connectCamera("1");
@@ -156,6 +207,8 @@ public class CameraFragment extends Fragment implements View.OnClickListener{
                     mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
                 }
 
+//                mCameraPresenter.getSetting("REAR VIEW CAMERA");
+
 
 
 
@@ -164,12 +217,12 @@ public class CameraFragment extends Fragment implements View.OnClickListener{
             case R.id.ffc:
                 mTitle.setText("FORWARD FACING CAMERA");
                 mHelptext.setText("Check entire Surrondings.");
-                rvc.setBackgroundColor(getResources().getColor(R.color.primary));
-                ffc.setBackgroundColor(getResources().getColor(R.color.primary1));
-                cargo.setBackgroundColor(getResources().getColor(R.color.primary));
-                aux.setBackgroundColor(getResources().getColor(R.color.primary));
-                frameLayout.setBackground(null);
-                ROTATE = "fulfilled";
+                mRvc.setBackgroundColor(getResources().getColor(R.color.primary));
+                mFfc.setBackgroundColor(getResources().getColor(R.color.primary1));
+                mCargo.setBackgroundColor(getResources().getColor(R.color.primary));
+                mAux.setBackgroundColor(getResources().getColor(R.color.primary));
+                mFrameLayout.setBackground(null);
+                mRotate = "fulfilled";
                 if (mTextureView.isAvailable()) {
                     setupCamera(mTextureView.getWidth(), mTextureView.getHeight());
 
@@ -180,140 +233,38 @@ public class CameraFragment extends Fragment implements View.OnClickListener{
 
                 }
 
-//                int s = updateBindStatus(1);
-
-
                 break;
             case R.id.cargo:
                 mTitle.setText("CARGO CAMERA");
                 mHelptext.setText("Check entire Surrondings.");
-                rvc.setBackgroundColor(getResources().getColor(R.color.primary));
-                ffc.setBackgroundColor(getResources().getColor(R.color.primary));
-                cargo.setBackgroundColor(getResources().getColor(R.color.primary2));
-                aux.setBackgroundColor(getResources().getColor(R.color.primary));
+                mRvc.setBackgroundColor(getResources().getColor(R.color.primary));
+                mFfc.setBackgroundColor(getResources().getColor(R.color.primary));
+                mCargo.setBackgroundColor(getResources().getColor(R.color.primary2));
+                mAux.setBackgroundColor(getResources().getColor(R.color.primary));
                 closeCamera();
                 mTextureView.setOpaque(false);
-                frameLayout.setBackgroundColor(Color.BLUE);
+                mFrameLayout.setBackgroundColor(Color.BLUE);
                 break;
             case R.id.aux:
                 mTitle.setText("AUX CAMERA");
                 mHelptext.setText("Check entire Surrondings.");
-                rvc.setBackgroundColor(getResources().getColor(R.color.primary));
-                ffc.setBackgroundColor(getResources().getColor(R.color.primary));
-                cargo.setBackgroundColor(getResources().getColor(R.color.primary));
-                aux.setBackgroundColor(getResources().getColor(R.color.primary2));
+                mRvc.setBackgroundColor(getResources().getColor(R.color.primary));
+                mFfc.setBackgroundColor(getResources().getColor(R.color.primary));
+                mCargo.setBackgroundColor(getResources().getColor(R.color.primary));
+                mAux.setBackgroundColor(getResources().getColor(R.color.primary2));
                 mTextureView.setOpaque(false);
                 closeCamera();
-                frameLayout.setBackgroundColor(Color.BLUE);
+                mFrameLayout.setBackgroundColor(Color.BLUE);
                 break;
 
 
         }
     }
 
-    /**
-     *
-     */
+    public void getValue(String name){
 
+            mHelptext.setText(name);
 
-    private TextureView.SurfaceTextureListener mSurfaceTextureListener = new TextureView.SurfaceTextureListener() {
-
-        /**
-         *  @brief : Invoked when a TextureView's SurfaceTexture is ready for use.
-         *  @param surfaceTexture : SurfaceTexture
-         *                      i : integer
-         *                      i1 : integer
-         */
-
-        @Override
-        public void onSurfaceTextureAvailable(@NonNull SurfaceTexture surfaceTexture, int i, int i1) {
-            setupCamera(i, i1);
-
-        }
-
-        @Override
-        public void onSurfaceTextureSizeChanged(@NonNull SurfaceTexture surfaceTexture, int i, int i1) {
-
-        }
-
-        @Override
-        public boolean onSurfaceTextureDestroyed(@NonNull SurfaceTexture surfaceTexture) {
-            return false;
-        }
-
-        @Override
-        public void onSurfaceTextureUpdated(@NonNull SurfaceTexture surfaceTexture) {
-
-        }
-    };
-
-
-    private CameraDevice.StateCallback mCameraDeviceStateCallback = new CameraDevice.StateCallback() {
-        @Override
-        public void onOpened(@NonNull CameraDevice cameraDevice) {
-            mCameraDevice = cameraDevice;
-            startPreview();
-//            mTitle.setText("REAR VIEW CAMERA");
-            mHelptext.setText("Check entire Surroundings.");
-            Toast.makeText(getContext(), "Camera connected!", Toast.LENGTH_LONG).show();
-
-        }
-
-        @Override
-        public void onDisconnected(@NonNull CameraDevice cameraDevice) {
-            cameraDevice.close();
-            mCameraDevice = null;
-
-        }
-
-        @Override
-        public void onError(@NonNull CameraDevice cameraDevice, int i) {
-            cameraDevice.close();
-            mCameraDevice = null;
-
-        }
-    };
-
-
-    private static SparseIntArray ORIENTATIONS = new SparseIntArray();
-
-    static {
-        ORIENTATIONS.append(Surface.ROTATION_0, 0);
-        ORIENTATIONS.append(Surface.ROTATION_90, 90);
-        ORIENTATIONS.append(Surface.ROTATION_180, 180);
-        ORIENTATIONS.append(Surface.ROTATION_270, 270);
-    }
-
-
-
-
-//    @Override
-//    public int updateBindStatus(int bindStatus) {
-//
-//
-//        int status = iCameraPresenter.getstatus();
-//        mTitle.setText(status);
-//        return 0;
-//
-//
-//    }
-
-
-    private static class CompareSizeByArea implements Comparator<Size> {
-
-
-        @Override
-        public int compare(Size size, Size t1) {
-            return Long.signum((long) t1.getWidth() * t1.getHeight() /
-                    (long) t1.getWidth() * t1.getHeight());
-        }
-    }
-
-
-    private static int sensorToDeviceRotation(CameraCharacteristics cameraCharacteristics, int deviceOrientation) {
-        int sensorOrientation = cameraCharacteristics.get(CameraCharacteristics.SENSOR_ORIENTATION);
-        deviceOrientation = ORIENTATIONS.get(deviceOrientation);
-        return (sensorOrientation + deviceOrientation + 360) % 360;
     }
 
 
@@ -330,6 +281,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener{
 
     }
 
+
     /**
      *  @brief : function used to close the camera.
      *
@@ -341,12 +293,11 @@ public class CameraFragment extends Fragment implements View.OnClickListener{
         }
     }
 
-    private HandlerThread mBackgroundHandlerThread;
-    private Handler mBackgroundHandler;
 
-    private String mCameraId;
-
-    private Size mPreviewSize;
+    /**
+     *  @brief : function used to enters the Resumed state,
+     *
+     */
 
     @Override
     public void onResume() {
@@ -354,17 +305,153 @@ public class CameraFragment extends Fragment implements View.OnClickListener{
 
         super.onResume();
         startBackgroundThread();
-//
-//        if (mTextureView.isAvailable()) {
-//            setupCamera(mTextureView.getWidth(), mTextureView.getHeight());
-//            connectCamera("0");
-//        } else {
-//            mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
-//        }
+
+        if (mTextureView.isAvailable()) {
+            setupCamera(mTextureView.getWidth(), mTextureView.getHeight());
+            connectCamera("0");
+        } else {
+            mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
+        }
     }
 
 
+    /**
+     * Variable to store surfaceTextureListener object
+     */
 
+
+    private TextureView.SurfaceTextureListener mSurfaceTextureListener = new TextureView.SurfaceTextureListener() {
+
+        /**
+         *  @brief : Invoked when a TextureView's SurfaceTexture is ready for use.
+         *  @param surfaceTexture : SurfaceTexture
+         *                      i : width
+         *                      i1 : height
+         */
+
+        @Override
+        public void onSurfaceTextureAvailable(@NonNull SurfaceTexture surfaceTexture, int i, int i1) {
+            setupCamera(i, i1);
+
+        }
+
+        /**
+         *  @brief : Invoked when the SurfaceTexture's buffers size changed.
+         *  @param surfaceTexture : SurfaceTexture
+         *                      i : width
+         *                      i1 : height
+         */
+
+        @Override
+        public void onSurfaceTextureSizeChanged(@NonNull SurfaceTexture surfaceTexture, int i, int i1) {
+
+        }
+
+        /**
+         *  @brief : Invoked when the specified SurfaceTexture is about to be destroyed.
+         *  @param surfaceTexture : SurfaceTexture
+         *
+         */
+        @Override
+        public boolean onSurfaceTextureDestroyed(@NonNull SurfaceTexture surfaceTexture) {
+            return false;
+        }
+
+        /**
+         *  @brief : Invoked when the specified SurfaceTexture is updated
+         *  @param surfaceTexture : SurfaceTexture
+         *
+         */
+
+        @Override
+        public void onSurfaceTextureUpdated(@NonNull SurfaceTexture surfaceTexture) {
+
+        }
+    };
+
+
+    /**
+     * Variable to store callback objects for receiving updates about the state of a camera device.
+     */
+
+    private CameraDevice.StateCallback mCameraDeviceStateCallback = new CameraDevice.StateCallback() {
+
+        /**
+         *  @brief : called when a camera device has finished opening.
+         *  @param cameraDevice : camera Device
+         *
+         */
+        @Override
+        public void onOpened(@NonNull CameraDevice cameraDevice) {
+            mCameraDevice = cameraDevice;
+            startPreview();
+            mTitle.setText("REAR VIEW CAMERA");
+            mHelptext.setText("Check entire Surroundings.");
+            Toast.makeText(getContext(), "Camera connected!", Toast.LENGTH_LONG).show();
+
+        }
+
+        /**
+         *  @brief : called when a camera device is no longer available for use.
+         *  @param cameraDevice : camera Device
+         *
+         */
+        @Override
+        public void onDisconnected(@NonNull CameraDevice cameraDevice) {
+            cameraDevice.close();
+            mCameraDevice = null;
+
+        }
+        /**
+         *  @brief : called when a camera device has encountered a serious error.
+         *  @param cameraDevice : camera Device
+         *
+         */
+
+        @Override
+        public void onError(@NonNull CameraDevice cameraDevice, int i) {
+            cameraDevice.close();
+            mCameraDevice = null;
+
+        }
+    };
+
+    /**
+     * Variable to store orientation
+     */
+
+    private static SparseIntArray ORIENTATIONS = new SparseIntArray();
+
+    static {
+        ORIENTATIONS.append(Surface.ROTATION_0, 0);
+        ORIENTATIONS.append(Surface.ROTATION_90, 90);
+        ORIENTATIONS.append(Surface.ROTATION_180, 180);
+        ORIENTATIONS.append(Surface.ROTATION_270, 270);
+    }
+
+
+//
+//    @Override
+//    public void setCamera(String title) {
+//        mTitle.setText(title);
+//    }
+
+
+
+
+    /**
+     *  @brief : Function for comparing the size.
+     *
+     */
+
+    private static class CompareSizeByArea implements Comparator<Size> {
+
+        @Override
+        public int compare(Size size, Size t1) {
+            return Long.signum((long) t1.getWidth() * t1.getHeight() /
+                    (long) t1.getWidth() * t1.getHeight());
+        }
+    }
 
     /**
      *  @brief : function used to setting up the camera for both back and front based on the camera id with specific width and height.
@@ -380,7 +467,6 @@ public class CameraFragment extends Fragment implements View.OnClickListener{
         CameraManager cameraManager = (CameraManager) getActivity().getSystemService(Context.CAMERA_SERVICE);
         try {
 
-//            for (String cameraId : cameraManager.getCameraIdList()) {
             String cameraId = "0";
 
             CameraCharacteristics cameraCharacteristics = cameraManager.getCameraCharacteristics(cameraId);
@@ -390,7 +476,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener{
             mPreviewSize = chooseOptimalSize(map.getOutputSizes(SurfaceTexture.class), rotatedWidth, rotatedHeight);
 
 
-            if (ROTATE == null){
+            if (mRotate == null){
                 cameraId = cameraManager.getCameraIdList()[1];
                 mCameraId = cameraId;
                 closeCamera();
@@ -399,7 +485,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener{
             else {
                 cameraId = cameraManager.getCameraIdList()[0];
                 mCameraId = cameraId;
-                ROTATE = null;
+                mRotate = null;
                 closeCamera();
             }
 
@@ -502,6 +588,9 @@ public class CameraFragment extends Fragment implements View.OnClickListener{
     }
 
 
+    /**
+     *  @brief : function used to get the optimal size.
+     */
 
     private Size chooseOptimalSize(Size[] choices, int width, int height) {
         List<Size> bigEnough = new ArrayList<Size>();
@@ -520,41 +609,5 @@ public class CameraFragment extends Fragment implements View.OnClickListener{
 
 }
 
-
-
-
-
-
-
-//    private final View.OnClickListener mListener = new View.OnClickListener() {
-//
-//        @Override
-//        public void onClick(View view) {
-//            switch (view.getId()) {
-//                case R.id.rvc:
-//                    title.setText("REAR VIEW CAMERA");
-//                    helptext.setText("Check entire Surrondings.");
-//                    rvc.setBackgroundColor(getResources().getColor(R.color.primary1));
-//
-//                    break;
-//                case R.id.ffc:
-//                    title.setText("FORWARD FACING CAMERA");
-//                    helptext.setText("Check entire Surrondings.");
-//                    break;
-//                case R.id.cargo:
-//                    title.setText("CARGO CAMERA");
-//                    helptext.setText("System Unavailbe");
-//                    break;
-//                case R.id.aux:
-//                    title.setText("AUX CAMERA");
-//                    helptext.setText("System Unavailble");
-//                    break;
-//            }
-//        }
-//
-//    };
-//
-//
-//}
 
 

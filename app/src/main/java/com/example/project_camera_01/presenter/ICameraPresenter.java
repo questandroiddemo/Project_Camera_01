@@ -13,7 +13,10 @@ public interface ICameraPresenter {
      * @brief Method to get previous active camera
      * @return camera : camera
      */
+
+//    void setSetting(int checkStatus);
     String getPreviousActiveCamera();
+//    void getSetting(String title);
 
 
 }

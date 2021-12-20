@@ -6,17 +6,21 @@ import android.util.Log;
 
 import com.example.project_camera_01.model.CameraModel;
 import com.example.project_camera_01.model.ICameraModel;
+import com.example.project_camera_01.view.CameraSettingInterface;
+import com.example.project_camera_01.view.CameraSettingsFragment;
 import com.example.project_camera_01.view.ICameraView;
 
 public class CameraPresenter implements ICameraPresenter{
     private ICameraView mCameraView;
 
     private ICameraModel mCameraModel;
+    private CameraSettingInterface mCameraSettingInterface;
 
     public CameraPresenter(ICameraView mCameraView) {
         this.mCameraView = mCameraView;
         mCameraModel=new CameraModel(this);
     }
+
 
     @Override
     public void initialize(Context context) {
@@ -32,8 +36,11 @@ public class CameraPresenter implements ICameraPresenter{
 
     }
 
+
     @Override
     public String getPreviousActiveCamera() {
         return mCameraModel.getPreviousActiveCamera();
     }
+
+
 }

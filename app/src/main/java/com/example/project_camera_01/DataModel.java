@@ -3,15 +3,38 @@ package com.example.project_camera_01;
 public class DataModel {
 
 
-    public String name;
-    public boolean checked;
-//    boolean checked;
+    String code = null;
+    String name = null;
+    boolean selected = false;
 
-
-    public DataModel(String name, boolean checked) {
+    public DataModel(String code, String name, boolean selected) {
+        super();
+        this.code = code;
         this.name = name;
-        this.checked = checked;
-
+        this.selected = selected;
     }
 
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
 }

@@ -1,73 +1,93 @@
 package com.example.project_camera_01;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.example.project_camera_01.view.CameraFragment;
+import com.example.project_camera_01.view.CameraSettingInterface;
+import com.example.project_camera_01.view.CameraSettingsFragment;
 
 import java.util.ArrayList;
 
-public class CustomAdapter extends ArrayAdapter {
+public class CustomAdapter extends ArrayAdapter<DataModel>{
 
-    private ArrayList dataSet;
-    Context mContext;
 
-    // View lookup cache
-    private static class ViewHolder {
-        TextView txtName;
-        CheckBox checkBox;
+    private ArrayList<DataModel> cameraList;
+    SharedPreferences.Editor editor;
+
+    CameraSettingInterface mCameraSettingInterface;
+//    SharedPreferences sp;
+//    String str;
+//    Boolean br;
+
+
+    public CustomAdapter(Context context,int textViewResourceId,ArrayList<DataModel> countryList){
+       super(context,textViewResourceId,countryList);
+
+       this.cameraList = new ArrayList<DataModel>();
+       this.cameraList.addAll(countryList);
+   }
+
+    private class ViewHolder {
+        TextView code;
+        CheckBox name;
     }
 
-    public CustomAdapter(ArrayList data, Context context) {
-        super(context, R.layout.row_item, data);
-        this.dataSet = data;
-        this.mContext = context;
 
-    }
+    @NonNull
     @Override
-    public int getCount() {
-        return dataSet.size();
-    }
+    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
-    @Override
-    public DataModel getItem(int position) {
-        return (DataModel) dataSet.get(position);
-    }
+        ViewHolder holder = null;
+        Log.v("ConvertView", String.valueOf(position));
+        if (convertView == null){
+            LayoutInflater vi = (LayoutInflater) getContext().getSystemService(
+                    Context.LAYOUT_INFLATER_SERVICE);
+            convertView = vi.inflate(R.layout.row_item, null);
+            holder = new ViewHolder();
+            holder.code = (TextView) convertView.findViewById(R.id.txtName);
+            holder.name = (CheckBox) convertView.findViewById(R.id.checkBox);
+            convertView.setTag(holder);
 
 
-    @Override
-    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+            holder.name.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CheckBox cb = (CheckBox) v;
+                    DataModel dataModel = (DataModel) cb.getTag();
+                    String set = dataModel.getCode();
+                    Toast.makeText(getContext(),
+                            ""+dataModel.getCode() + cb.getText() +
+                                    " is " + cb.isChecked(),
+                            Toast.LENGTH_LONG).show();
+                    dataModel.setSelected(cb.isChecked());
+                    mCameraSettingInterface.setSettings(dataModel.getCode(),cb.isChecked());
 
-        ViewHolder viewHolder;
-        final View result;
+                }
 
-        if (convertView == null) {
-            viewHolder = new ViewHolder();
-            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_item, parent, false);
-            viewHolder.txtName = (TextView) convertView.findViewById(R.id.txtName);
-            viewHolder.checkBox = (CheckBox) convertView.findViewById(R.id.checkBox);
-
-            result=convertView;
-            convertView.setTag(viewHolder);
-
-        } else {
-            viewHolder = (ViewHolder) convertView.getTag();
-            result=convertView;
+            });
         }
-
-        DataModel item = getItem(position);
-
-
-        viewHolder.txtName.setText(item.name);
-        viewHolder.checkBox.setChecked(item.checked);
-
-
-        return result;
+       else {
+            holder = (ViewHolder) convertView.getTag();
+        }
+        DataModel dataModel = cameraList.get(position);
+        holder.code.setText(dataModel.getCode());
+        holder.name.setText(dataModel.getName());
+        holder.name.setChecked(dataModel.isSelected());
+        holder.name.setTag(dataModel);
+        return convertView;
     }
-
 }

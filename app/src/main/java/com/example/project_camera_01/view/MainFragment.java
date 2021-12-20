@@ -24,11 +24,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.project_camera_01.IMyAidlInterface;
+
 import com.example.project_camera_01.R;
 import com.example.project_camera_01.VpAdapter;
 import com.example.project_camera_01.presenter.CameraPresenter;
 import com.example.project_camera_01.presenter.ICameraPresenter;
+import com.example.project_camera_01.presenter.ICameraSettingPresenter;
 import com.google.android.material.tabs.TabLayout;
 import static com.example.project_camera_01.common.CameraConstants.BIND_FAIL;
 import static com.example.project_camera_01.common.CameraConstants.BIND_SUCCESS;
@@ -43,6 +44,7 @@ import static com.example.project_camera_01.common.CameraConstants.TAG;
 public class MainFragment extends Fragment implements  ICameraView{
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    private CameraSettingsFragment mCameraSettingsFragment;
     View v;
 
     /**
@@ -52,9 +54,10 @@ public class MainFragment extends Fragment implements  ICameraView{
      * @param savedInstanceState :  Object of Bundle
      * @return
      */
-    IMyAidlInterface iMyAidlInterface;
+
     Boolean connected=true;
     private ICameraPresenter mCameraPresenter;
+    private ICameraSettingPresenter mCameraSettingPresenter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -76,33 +79,30 @@ public class MainFragment extends Fragment implements  ICameraView{
         vpAdapter.addFragment(new CameraFragment(),"Camera");
         vpAdapter.addFragment(new CameraSettingsFragment(),"Camera settings");
         viewPager.setAdapter(vpAdapter);
+
+
 //        TextView textView= v.findViewById(R.id.textView);
-
-
-
-
         return v;
 
 
     }
 
+    CameraFragment cameraFragment = null;
 
+    CameraSettingsFragment cameraSettingsFragment = new CameraSettingsFragment();
     @Override
     public void updateBindStatus(int bindStatus) {
 
-//        Toast.makeText(getContext(),"HAI",Toast.LENGTH_LONG).show();
         if (bindStatus == BIND_SUCCESS) {
             Toast.makeText(getContext(), "BIND SUCCESS", Toast.LENGTH_LONG).show();
-            String previousCamera = mCameraPresenter.getPreviousActiveCamera();
-//            Toast.makeText(getContext()," "+previousCamera,Toast.LENGTH_LONG).show();
+            String previous = mCameraPresenter.getPreviousActiveCamera();
             Log.d("CameraService","OnBind");
-//            textView.setText("Hey, one more TextView");
-
-
         }
         else {
             Toast.makeText(getContext(), "BIND Failed", Toast.LENGTH_LONG).show();
         }
 
     }
+
+
 }
