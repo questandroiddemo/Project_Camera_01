@@ -65,7 +65,7 @@ import java.util.List;
  */
 
 
-public class CameraFragment extends Fragment implements View.OnClickListener{
+public class CameraFragment extends Fragment implements View.OnClickListener,ICameraView.CameraInterface{
 
 
     /**
@@ -261,11 +261,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener{
         }
     }
 
-    public void getValue(String name){
 
-            mHelptext.setText(name);
-
-    }
 
 
     /**
@@ -427,6 +423,12 @@ public class CameraFragment extends Fragment implements View.OnClickListener{
         ORIENTATIONS.append(Surface.ROTATION_90, 90);
         ORIENTATIONS.append(Surface.ROTATION_180, 180);
         ORIENTATIONS.append(Surface.ROTATION_270, 270);
+    }
+
+    @Override
+    public void getValue(String title) {
+
+        mHelptext.setText(title);
     }
 
 
