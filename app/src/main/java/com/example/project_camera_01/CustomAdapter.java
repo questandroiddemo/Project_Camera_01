@@ -1,37 +1,42 @@
 package com.example.project_camera_01;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.project_camera_01.presenter.ICameraSettingPresenter;
 import com.example.project_camera_01.view.CameraFragment;
-import com.example.project_camera_01.view.CameraSettingInterface;
-import com.example.project_camera_01.view.CameraSettingsFragment;
+import com.example.project_camera_01.view.ICameraSetting;
+import com.example.project_camera_01.view.ICameraView;
+import com.example.project_camera_01.view.MainFragment;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CustomAdapter extends ArrayAdapter<DataModel>{
 
 
     private ArrayList<DataModel> cameraList;
     SharedPreferences.Editor editor;
+    ICameraView mCameraView;
+    ICameraSettingPresenter mCameraSettingPresenter;
+    ICameraSetting mCameraSettingInterface;
 
-    CameraSettingInterface mCameraSettingInterface;
 //    SharedPreferences sp;
 //    String str;
 //    Boolean br;
+    CameraFragment cameraFragment = new CameraFragment();
 
 
     public CustomAdapter(Context context,int textViewResourceId,ArrayList<DataModel> countryList){
@@ -40,6 +45,8 @@ public class CustomAdapter extends ArrayAdapter<DataModel>{
        this.cameraList = new ArrayList<DataModel>();
        this.cameraList.addAll(countryList);
    }
+
+
 
     private class ViewHolder {
         TextView code;
@@ -73,8 +80,9 @@ public class CustomAdapter extends ArrayAdapter<DataModel>{
                             ""+dataModel.getCode() + cb.getText() +
                                     " is " + cb.isChecked(),
                             Toast.LENGTH_LONG).show();
+//                    notifySetting(cb.isChecked());
+                    mCameraSettingPresenter.setSetting(cb.isChecked());
                     dataModel.setSelected(cb.isChecked());
-                    mCameraSettingInterface.setSettings(dataModel.getCode(),cb.isChecked());
 
                 }
 

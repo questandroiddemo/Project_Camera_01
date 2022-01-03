@@ -5,7 +5,10 @@ public interface ICameraSettingPresenter {
 //    void setSetting(int checkStatus);
 
 
-    void getSetting(String name,Boolean check);
+//    void getSetting(String name,Boolean check);
+
+    void setSetting(boolean status);
+    boolean getSettings(int status);
 
 
 }

@@ -17,6 +17,8 @@ public interface ICameraPresenter {
 //    void setSetting(int checkStatus);
     String getPreviousActiveCamera();
 //    void getSetting(String title);
+void notifyCameraStatus(boolean status);
+    void startCamera();
 
 
 }

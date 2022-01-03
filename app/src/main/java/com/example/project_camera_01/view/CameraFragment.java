@@ -49,8 +49,11 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.project_camera_01.CustomAdapter;
+import com.example.project_camera_01.DataModel;
 import com.example.project_camera_01.R;
 import com.example.project_camera_01.presenter.ICameraPresenter;
+import com.example.project_camera_01.presenter.ICameraSettingPresenter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -65,7 +68,7 @@ import java.util.List;
  */
 
 
-public class CameraFragment extends Fragment implements View.OnClickListener,ICameraView.CameraInterface{
+public class CameraFragment extends Fragment implements View.OnClickListener{
 
 
     /**
@@ -130,6 +133,8 @@ public class CameraFragment extends Fragment implements View.OnClickListener,ICa
 
     private Size mPreviewSize;
 
+    ICameraSettingPresenter mCameraSettingPresenter;
+
 
     /**
      * variable to store a value which is used for specifying the camera (front and back) based on its value.
@@ -137,7 +142,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener,ICa
     public static String mRotate;
 
     private ICameraPresenter mCameraPresenter;
-
+    private CameraSettingsFragment cameraSettingsFragment = new CameraSettingsFragment();
 
     /**
      * @Brief Fragment lifecycle method onCreateView
@@ -180,6 +185,8 @@ public class CameraFragment extends Fragment implements View.OnClickListener,ICa
         return mView;
     }
 
+
+
     /**
      * @brief Function used to set the button click
      * @param : v:View
@@ -197,6 +204,8 @@ public class CameraFragment extends Fragment implements View.OnClickListener,ICa
                 mAux.setBackgroundColor(getResources().getColor(R.color.primary));
                 mFrameLayout.setBackground(null);
                 mRotate = "null";
+//                Toast.makeText(getContext(), "the result is "+mCameraSettingPresenter.getSettings(false), Toast.LENGTH_SHORT).show();
+
                 if (mTextureView.isAvailable()) {
                     setupCamera(mTextureView.getWidth(), mTextureView.getHeight());
                     connectCamera("1");
@@ -208,6 +217,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener,ICa
                 }
 
 //                mCameraPresenter.getSetting("REAR VIEW CAMERA");
+                mCameraSettingPresenter.getSettings(1);
 
 
 
@@ -262,8 +272,6 @@ public class CameraFragment extends Fragment implements View.OnClickListener,ICa
     }
 
 
-
-
     /**
      *  @brief : function used to pause the application
      *
@@ -302,7 +310,9 @@ public class CameraFragment extends Fragment implements View.OnClickListener,ICa
         super.onResume();
         startBackgroundThread();
 
+
         if (mTextureView.isAvailable()) {
+
             setupCamera(mTextureView.getWidth(), mTextureView.getHeight());
             connectCamera("0");
         } else {
@@ -424,22 +434,6 @@ public class CameraFragment extends Fragment implements View.OnClickListener,ICa
         ORIENTATIONS.append(Surface.ROTATION_180, 180);
         ORIENTATIONS.append(Surface.ROTATION_270, 270);
     }
-
-    @Override
-    public void getValue(String title) {
-
-        mHelptext.setText(title);
-    }
-
-
-//
-//    @Override
-//    public void setCamera(String title) {
-//        mTitle.setText(title);
-//    }
-
-
-
 
     /**
      *  @brief : Function for comparing the size.

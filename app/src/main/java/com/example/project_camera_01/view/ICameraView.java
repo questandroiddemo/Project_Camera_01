@@ -6,10 +6,6 @@ public interface ICameraView {
 //    void getSetting(String name);
 //    void setSetting(int checkStatus);
 
-    interface CameraInterface{
-        void getValue(String title);
-    }
-
-
+    void notifyCameraStatus(boolean status);
 
 }

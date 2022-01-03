@@ -1,10 +1,10 @@
 package com.example.project_camera_01.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import android.os.RemoteException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,19 +15,21 @@ import android.widget.Toast;
 import com.example.project_camera_01.CustomAdapter;
 import com.example.project_camera_01.DataModel;
 import com.example.project_camera_01.R;
+import com.example.project_camera_01.presenter.ICameraPresenter;
 import com.example.project_camera_01.presenter.ICameraSettingPresenter;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 
-public class CameraSettingsFragment extends Fragment implements CameraSettingInterface{
+public class CameraSettingsFragment extends Fragment implements ICameraSetting {
 
 
     CustomAdapter dataAdapter = null;
     View rootView;
     ListView listView;
     ICameraSettingPresenter mCameraSettingPresenter;
+    ICameraPresenter mCameraPresenter;
 
 
     @Override
@@ -59,6 +61,14 @@ public class CameraSettingsFragment extends Fragment implements CameraSettingInt
         listView.setAdapter(dataAdapter);
 
 
+//
+//        HashMap<String,Boolean> hashSet = new HashMap<String,Boolean>();
+//        hashSet.put(dataModel.getCode(),dataModel.isSelected());
+//        Intent intent = new Intent(getActivity(),CameraFragment.class);
+//        intent.putExtra("hashMap", hashSet);
+//        getContext().startActivity(intent);
+
+
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -68,16 +78,16 @@ public class CameraSettingsFragment extends Fragment implements CameraSettingInt
                         "Clicked on Row: " + dataModel.getCode(),
                         Toast.LENGTH_LONG).show();
 
+
             }
         });
 
     }
 
-    @Override
-    public void setSettings(String name, Boolean check) {
-         String mName = name;
-         Boolean mCheck = check;
-        mCameraSettingPresenter.getSetting(mName,mCheck);
 
+    @Override
+    public void setSetting(boolean status) {
+        mCameraSettingPresenter.setSetting(status);
     }
+
 }

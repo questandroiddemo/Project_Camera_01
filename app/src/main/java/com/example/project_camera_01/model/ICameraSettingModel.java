@@ -4,5 +4,8 @@ public interface ICameraSettingModel {
 
 
 
-    String getSettingName(String name);
+//    String getSettingName(String name);
+//void startCamera();
+void setSetting(boolean status);
+    boolean getSettings(int status);
 }

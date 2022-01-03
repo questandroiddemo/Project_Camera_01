@@ -11,9 +11,13 @@ import android.os.RemoteException;
 import android.util.Log;
 
 import com.example.cameraserviceinterface.CameraServiceInterface;
+import com.example.cameraserviceinterface.IBaseAidlInterface;
+import com.example.cameraserviceinterface.ICameraListener;
 import com.example.cameraserviceinterface.IServiceCameraInterface;
 import com.example.project_camera_01.presenter.CameraPresenter;
 import com.example.project_camera_01.presenter.ICameraPresenter;
+
+import java.util.HashMap;
 
 public class CameraModel implements ICameraModel {
     private IServiceCameraInterface mServiceCameraInterface;
@@ -21,19 +25,33 @@ public class CameraModel implements ICameraModel {
     private ICameraPresenter mCameraPresenter;
 
     private CameraServiceInterface mCameraServiceInterface;
+
+    private IBaseAidlInterface mBaseAidlInterface;
     private static int Cstatus = 1;
+
+    private ICameraListener mCameraListener = new ICameraListener.Stub() {
+        @Override
+        public void notifyCameraStatus(boolean status) throws RemoteException {
+            Log.d(TAG, "Inside notifyCameraStatus:" + status);
+            mCameraPresenter.notifyCameraStatus(status);
+        }
+    };
 
 
     private CameraServiceInterface.IServiceConnectionCallback mConnectionCallBack = new CameraServiceInterface.IServiceConnectionCallback() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
 
+            mBaseAidlInterface = IBaseAidlInterface.Stub.asInterface(service);
             mServiceCameraInterface = mCameraServiceInterface.getCameraInterface();
+            if (mBaseAidlInterface != null) {
+                try {
+                    mBaseAidlInterface.registerAsyncConnection(mCameraListener);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
             mCameraPresenter.updateBindStatus(BIND_SUCCESS);
-
-
-            Log.d("CameraService","OnConnect");
-
         }
 
         @Override
@@ -71,6 +89,17 @@ public class CameraModel implements ICameraModel {
         Log.d(TAG,"getPreviousActiveCamera:"+camera);
         return camera;
     }
+
+    @Override
+    public void startCamera() {
+        try {
+            mServiceCameraInterface.startCamera();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
 //    @Override
 //    public String getSetting(String title) {

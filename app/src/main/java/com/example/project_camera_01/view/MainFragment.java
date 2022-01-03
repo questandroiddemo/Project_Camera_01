@@ -86,8 +86,10 @@ public class MainFragment extends Fragment implements  ICameraView{
 
 
     }
-
+    ICameraSetting mCameraSetting;
     CameraFragment cameraFragment = null;
+    String name = null;
+    Boolean status = false;
 
     CameraSettingsFragment cameraSettingsFragment = new CameraSettingsFragment();
     @Override
@@ -96,13 +98,30 @@ public class MainFragment extends Fragment implements  ICameraView{
         if (bindStatus == BIND_SUCCESS) {
             Toast.makeText(getContext(), "BIND SUCCESS", Toast.LENGTH_LONG).show();
             String previous = mCameraPresenter.getPreviousActiveCamera();
+//            Toast.makeText(getContext(), ""+previous, Toast.LENGTH_SHORT).show();
             Log.d("CameraService","OnBind");
-        }
-        else {
-            Toast.makeText(getContext(), "BIND Failed", Toast.LENGTH_LONG).show();
-        }
 
+
+            mCameraPresenter.startCamera();
+
+        }
     }
+
+    @Override
+    public void notifyCameraStatus(boolean status) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (status) {
+                    Toast.makeText(getContext(), "Camera started", Toast.LENGTH_LONG).show();
+                }
+                else
+                    Toast.makeText(getContext(), "Camera stopped" , Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+
 
 
 }
