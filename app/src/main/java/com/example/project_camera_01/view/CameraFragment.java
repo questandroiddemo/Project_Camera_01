@@ -217,7 +217,9 @@ public class CameraFragment extends Fragment implements View.OnClickListener{
                 }
 
 //                mCameraPresenter.getSetting("REAR VIEW CAMERA");
-                mCameraSettingPresenter.getSettings(1);
+                boolean c = mCameraSettingPresenter.getSettings(1);
+                Toast.makeText(getContext(), ""+c, Toast.LENGTH_SHORT).show();
+
 
 
 
