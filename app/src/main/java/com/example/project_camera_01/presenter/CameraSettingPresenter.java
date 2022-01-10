@@ -41,8 +41,8 @@ public class CameraSettingPresenter implements ICameraSettingPresenter{
      *
      */
     @Override
-    public boolean getSettings() {
-        return mCameraSettingModel.getSettings();
+    public boolean getSettings(int status) {
+        return mCameraSettingModel.getSettings(status);
     }
 
 }

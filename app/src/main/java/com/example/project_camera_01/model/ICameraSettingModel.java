@@ -13,5 +13,5 @@ public interface ICameraSettingModel {
      * @brief Method to get the value of setting.
      *
      */
-    boolean getSettings();
+    boolean getSettings(int status);
 }

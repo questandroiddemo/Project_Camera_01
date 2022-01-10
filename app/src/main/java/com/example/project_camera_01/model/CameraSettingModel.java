@@ -120,11 +120,11 @@ public class CameraSettingModel implements ICameraSettingModel{
     }
 
     /**
-     * @brief Method to get previous active camera
+     * @brief Method to get the value of settings.
      * @return setStatus : status
      */
     @Override
-    public boolean getSettings() {
+    public boolean getSettings(int status) {
         boolean setStatus = false;
         try {
             mServiceCameraInterface.getSettings();
