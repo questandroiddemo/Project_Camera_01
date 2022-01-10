@@ -10,4 +10,6 @@ public class CameraConstants {
      * Integer value for bind fail.
      */
     public static final int BIND_FAIL = -1;
+    public static final int delaySetting= 1;
+    public static final int guidLineSetting = 2;
 }

@@ -9,46 +9,40 @@ import com.example.project_camera_01.view.ICameraView;
 
 public class CameraSettingPresenter implements ICameraSettingPresenter{
 
+    /**
+     * variable to store object of ICameraSetting.
+     */
     private ICameraSetting mCameraSettingInterface;
+    /**
+     * variable to store object of ICameraSettingModel.
+     */
     private ICameraSettingModel mCameraSettingModel;
-    private ICameraView mCameraView;
-    private CameraFragment cameraFragment;
 
-
+    /**
+     * @brief Constructor of CameraSettingPresenter.
+     */
     public CameraSettingPresenter(ICameraSetting cameraSettingInterface) {
             this.mCameraSettingInterface = cameraSettingInterface;
             mCameraSettingModel = new CameraSettingModel(this);
 
     }
+    /**
+     * @brief Method to set the value of setting.
+     * @param status : status of setting.
+     */
 
     @Override
-    public void setSetting(boolean status) {
-        mCameraSettingModel.setSetting(status);
+    public void setSetting(Boolean status) {
+       mCameraSettingModel.setSetting(status);
     }
 
+    /**
+     * @brief Method to get the value of setting.
+     *
+     */
     @Override
-    public boolean getSettings(int status) {
-        return mCameraSettingModel.getSettings(status);
+    public boolean getSettings() {
+        return mCameraSettingModel.getSettings();
     }
 
-//    @Override
-//    public void notifyCameraStatus(boolean status) {
-//
-//        mCameraView.notifyCameraStatus(status);
-//    }
-//
-//    @Override
-//    public void startCamera() {
-//           mCameraSettingModel.startCamera();
-//    }
-
-
-//    @Override
-//    public void getSetting(String name, Boolean check) {
-//
-//       String mName =  mCameraSettingModel.getSettingName(name);
-//       if (mName != null){
-//            cameraFragment.getValue(mName);
-//       }
-//    }
 }

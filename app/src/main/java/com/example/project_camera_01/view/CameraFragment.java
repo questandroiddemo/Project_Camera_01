@@ -141,9 +141,6 @@ public class CameraFragment extends Fragment implements View.OnClickListener{
      */
     public static String mRotate;
 
-    private ICameraPresenter mCameraPresenter;
-    private CameraSettingsFragment cameraSettingsFragment = new CameraSettingsFragment();
-
     /**
      * @Brief Fragment lifecycle method onCreateView
      * @param inflater           :  Object of LayoutInflater
@@ -204,7 +201,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener{
                 mAux.setBackgroundColor(getResources().getColor(R.color.primary));
                 mFrameLayout.setBackground(null);
                 mRotate = "null";
-//                Toast.makeText(getContext(), "the result is "+mCameraSettingPresenter.getSettings(false), Toast.LENGTH_SHORT).show();
+
 
                 if (mTextureView.isAvailable()) {
                     setupCamera(mTextureView.getWidth(), mTextureView.getHeight());
@@ -215,15 +212,6 @@ public class CameraFragment extends Fragment implements View.OnClickListener{
                 } else {
                     mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
                 }
-
-//                mCameraPresenter.getSetting("REAR VIEW CAMERA");
-                boolean c = mCameraSettingPresenter.getSettings(1);
-                Toast.makeText(getContext(), ""+c, Toast.LENGTH_SHORT).show();
-
-
-
-
-
 
                 break;
             case R.id.ffc:
@@ -311,12 +299,11 @@ public class CameraFragment extends Fragment implements View.OnClickListener{
 
         super.onResume();
         startBackgroundThread();
-
-
         if (mTextureView.isAvailable()) {
 
             setupCamera(mTextureView.getWidth(), mTextureView.getHeight());
-            connectCamera("0");
+            connectCamera("1");
+//            mCameraSettingPresenter.getSettings();
         } else {
             mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
         }
@@ -396,6 +383,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener{
             mTitle.setText("REAR VIEW CAMERA");
             mHelptext.setText("Check entire Surroundings.");
             Toast.makeText(getContext(), "Camera connected!", Toast.LENGTH_LONG).show();
+
 
         }
 

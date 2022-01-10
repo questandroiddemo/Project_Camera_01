@@ -27,17 +27,13 @@ import java.util.HashMap;
 public class CustomAdapter extends ArrayAdapter<DataModel>{
 
 
+    /**
+     * variable to store ArrayList.
+     */
     private ArrayList<DataModel> cameraList;
-    SharedPreferences.Editor editor;
-    ICameraView mCameraView;
-    ICameraSettingPresenter mCameraSettingPresenter;
-    ICameraSetting mCameraSettingInterface;
-
-//    SharedPreferences sp;
-//    String str;
-//    Boolean br;
-    CameraFragment cameraFragment = new CameraFragment();
-
+    /**
+     * @brief Constructor of CustomAdapter
+     */
 
     public CustomAdapter(Context context,int textViewResourceId,ArrayList<DataModel> countryList){
        super(context,textViewResourceId,countryList);
@@ -45,8 +41,9 @@ public class CustomAdapter extends ArrayAdapter<DataModel>{
        this.cameraList = new ArrayList<DataModel>();
        this.cameraList.addAll(countryList);
    }
-
-
+    /**
+     * @brief ViewHolder class
+     */
 
     private class ViewHolder {
         TextView code;
@@ -54,6 +51,12 @@ public class CustomAdapter extends ArrayAdapter<DataModel>{
     }
 
 
+    /**
+     * @brief Method to get the view.
+     * @param position           :  position
+     * @param convertView          :  view
+     * @param parent :  ViewGroup
+     */
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -81,7 +84,7 @@ public class CustomAdapter extends ArrayAdapter<DataModel>{
                                     " is " + cb.isChecked(),
                             Toast.LENGTH_LONG).show();
 //                    notifySetting(cb.isChecked());
-                    mCameraSettingPresenter.setSetting(cb.isChecked());
+//                    mCameraSettingPresenter.setSetting(cb.isChecked());
                     dataModel.setSelected(cb.isChecked());
 
                 }

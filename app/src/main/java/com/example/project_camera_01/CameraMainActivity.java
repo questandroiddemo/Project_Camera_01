@@ -27,8 +27,6 @@ public class CameraMainActivity extends AppCompatActivity {
      * @brief Android life cycle function
      * @param savedInstanceState : object of Bundle
      */
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,26 +37,5 @@ public class CameraMainActivity extends AppCompatActivity {
                     .add(android.R.id.content, new MainFragment())
                     .commit();
         }
-
-
     }
-
-
-
-
-
-//    private final ServiceConnection serviceCon=new ServiceConnection() {
-//
-////        @Override
-////        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-////            iMyAidlInterface = IMyAidlInterface.Stub.asInterface(iBinder);
-////        }
-//
-//        @Override
-//        public void onServiceDisconnected(ComponentName componentName) {
-//
-//        }
-//    };
-
-
 }

@@ -15,23 +15,49 @@ import android.widget.Toast;
 import com.example.project_camera_01.CustomAdapter;
 import com.example.project_camera_01.DataModel;
 import com.example.project_camera_01.R;
+import com.example.project_camera_01.common.CameraConstants;
 import com.example.project_camera_01.presenter.ICameraPresenter;
 import com.example.project_camera_01.presenter.ICameraSettingPresenter;
-
+import com.example.project_camera_01.common.CameraConstants.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 
 public class CameraSettingsFragment extends Fragment implements ICameraSetting {
 
-
+    /**
+     * variable to store CustomAdapter object.
+     */
     CustomAdapter dataAdapter = null;
+    /**
+     * variable to store View.
+     */
+
     View rootView;
+
+    /**
+     * variable to store ListView.
+     */
     ListView listView;
+
+    /**
+     * variable to store ICameraSettingPresenter object.
+     */
     ICameraSettingPresenter mCameraSettingPresenter;
-    ICameraPresenter mCameraPresenter;
 
+    /**
+     * variable to store DataModel object.
+     */
 
+    DataModel dataModel;
+
+    /**
+     * @Brief Fragment lifecycle method onCreateView
+     * @param inflater           :  Object of LayoutInflater
+     * @param container          :  Object of ViewGroup
+     * @param savedInstanceState :  Object of Bundle
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -44,7 +70,14 @@ public class CameraSettingsFragment extends Fragment implements ICameraSetting {
 
         return rootView;
     }
-    DataModel dataModel;
+
+
+
+
+    /**
+     * @brief Function used display the list of settings.
+     *
+     */
 
     private void displayListView() {
 
@@ -59,16 +92,6 @@ public class CameraSettingsFragment extends Fragment implements ICameraSetting {
         dataAdapter = new CustomAdapter(getContext(), R.layout.row_item, cameraList);
         // Assign adapter to ListView
         listView.setAdapter(dataAdapter);
-
-
-//
-//        HashMap<String,Boolean> hashSet = new HashMap<String,Boolean>();
-//        hashSet.put(dataModel.getCode(),dataModel.isSelected());
-//        Intent intent = new Intent(getActivity(),CameraFragment.class);
-//        intent.putExtra("hashMap", hashSet);
-//        getContext().startActivity(intent);
-
-
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -85,8 +108,22 @@ public class CameraSettingsFragment extends Fragment implements ICameraSetting {
     }
 
 
+
+    /**
+     * @brief Function used to set the value of setting in to the server.
+     * @param : status : true or false.
+     */
+    HashMap<Integer,Boolean> hash_map = new HashMap<Integer,Boolean>();
+
+    public HashMap<Integer, Boolean> getHash_map() {
+        return hash_map;
+    }
+
     @Override
     public void setSetting(boolean status) {
+        hash_map.put(CameraConstants.delaySetting,dataModel.isSelected());
+        hash_map.put(CameraConstants.guidLineSetting,dataModel.isSelected());
+
         mCameraSettingPresenter.setSetting(status);
     }
 

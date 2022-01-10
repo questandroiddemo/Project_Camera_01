@@ -20,15 +20,26 @@ import com.example.project_camera_01.presenter.ICameraPresenter;
 import java.util.HashMap;
 
 public class CameraModel implements ICameraModel {
+
+    /**
+     * variable to store object of IServiceCameraInterface.
+     */
     private IServiceCameraInterface mServiceCameraInterface;
-
+    /**
+     * variable to store object of ICameraPresenter.
+     */
     private ICameraPresenter mCameraPresenter;
-
+    /**
+     * variable to store object of CameraServiceInterface.
+     */
     private CameraServiceInterface mCameraServiceInterface;
-
+    /**
+     * variable to store object of IBaseAidlInterface.
+     */
     private IBaseAidlInterface mBaseAidlInterface;
-    private static int Cstatus = 1;
-
+    /**
+     * variable to store object of ICameraListener.
+     */
     private ICameraListener mCameraListener = new ICameraListener.Stub() {
         @Override
         public void notifyCameraStatus(boolean status) throws RemoteException {
@@ -37,8 +48,17 @@ public class CameraModel implements ICameraModel {
         }
     };
 
+    /**
+     * variable to store object of ServiceConnection.
+     */
 
     private CameraServiceInterface.IServiceConnectionCallback mConnectionCallBack = new CameraServiceInterface.IServiceConnectionCallback() {
+
+        /**
+         * @brief Call back method onServiceConnected, for bind service call
+         * @param name : component name
+         * @param service : service
+         */
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
 
@@ -54,6 +74,10 @@ public class CameraModel implements ICameraModel {
             mCameraPresenter.updateBindStatus(BIND_SUCCESS);
         }
 
+        /**
+         * @brief Call back method onServiceDisconnected
+         * @param name : component name
+         */
         @Override
         public void onServiceDisconnected(ComponentName name) {
             mCameraPresenter.updateBindStatus(BIND_FAIL);
@@ -63,10 +87,18 @@ public class CameraModel implements ICameraModel {
 
     };
 
+    /**
+     * @brief Constructor of CameraRvcModelImpl
+     */
     public CameraModel(CameraPresenter cameraPresenter) {
 
         mCameraPresenter = cameraPresenter;
     }
+
+    /**
+     * @brief Method to initialize this class.
+     * @param context : context
+     */
     @Override
     public void initialize(Context context) {
 
@@ -78,6 +110,10 @@ public class CameraModel implements ICameraModel {
     }
 
 
+    /**
+     * @brief Method to get previous active camera
+     * @return camera : camera
+     */
     @Override
     public String getPreviousActiveCamera() {
         String camera = null;
@@ -89,7 +125,9 @@ public class CameraModel implements ICameraModel {
         Log.d(TAG,"getPreviousActiveCamera:"+camera);
         return camera;
     }
-
+    /**
+     * @brief Method to start camera.
+     */
     @Override
     public void startCamera() {
         try {
@@ -98,19 +136,5 @@ public class CameraModel implements ICameraModel {
             e.printStackTrace();
         }
     }
-
-
-
-//    @Override
-//    public String getSetting(String title) {
-//        String set = null;
-//        try {
-//            set = mServiceCameraInterface.getSetting(title);
-//        } catch (RemoteException e) {
-//            e.printStackTrace();
-//        }
-//        return set;
-//    }
-
 
 }

@@ -3,6 +3,11 @@ package com.example.project_camera_01.presenter;
 import android.content.Context;
 
 public interface ICameraPresenter {
+
+    /**
+     * @brief Method to initialize Context
+     * @param context : context
+     */
     void initialize(Context context);
     /**
      * @brief Method for get bind status.
@@ -14,10 +19,17 @@ public interface ICameraPresenter {
      * @return camera : camera
      */
 
-//    void setSetting(int checkStatus);
     String getPreviousActiveCamera();
-//    void getSetting(String title);
-void notifyCameraStatus(boolean status);
+
+    /**
+     * @brief Method to notify camera status.
+     * @param status : status of camera.
+     */
+
+    void notifyCameraStatus(boolean status);
+    /**
+     * @brief Method to start camera
+     */
     void startCamera();
 
 

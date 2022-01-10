@@ -20,18 +20,43 @@ import com.example.project_camera_01.view.CameraFragment;
 
 public class CameraSettingModel implements ICameraSettingModel{
 
+
+    /**
+     * variable to store object of IServiceCameraInterface.
+     */
     private IServiceCameraInterface mServiceCameraInterface;
+
+    /**
+     * variable to store object of ICameraSettingPresenter.
+     */
     private ICameraSettingPresenter mCameraSettingPresenter;
+
+    /**
+     * variable to store object of CameraServiceInterface.
+     */
     private CameraServiceInterface mCameraServiceInterface;
-    private CameraFragment mCameraFragment;
+
+    /**
+     * variable to store object of IBaseAidlInterface.
+     */
     private IBaseAidlInterface mBaseAidlInterface;
+
+    /**
+     * variable to store object of ICameraPresenter.
+     */
     private ICameraPresenter mCameraPresenter;
 
+    /**
+     * @brief Constructor of CameraSettingModel
+     */
     public CameraSettingModel(CameraSettingPresenter cameraSettingPresenter) {
 
         mCameraSettingPresenter = cameraSettingPresenter;
     }
 
+    /**
+     * variable to store object of ICameraListener.
+     */
     private ICameraListener mCameraListener = new ICameraListener.Stub() {
 
         @Override
@@ -43,7 +68,16 @@ public class CameraSettingModel implements ICameraSettingModel{
     };
 
 
+    /**
+     * variable to store object of ServiceConnection.
+     */
     private CameraServiceInterface.IServiceConnectionCallback mConnectionCallBack = new CameraServiceInterface.IServiceConnectionCallback() {
+
+        /**
+         * @brief Call back method onServiceConnected, for bind service call
+         * @param name : component name
+         * @param service : service
+         */
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
 
@@ -59,12 +93,21 @@ public class CameraSettingModel implements ICameraSettingModel{
             mCameraPresenter.updateBindStatus(BIND_SUCCESS);
         }
 
+        /**
+         * @brief Call back method onServiceDisconnected
+         * @param name : component name
+         */
         @Override
         public void onServiceDisconnected(ComponentName name) {
             mCameraPresenter.updateBindStatus(BIND_FAIL);
         }
     };
 
+
+    /**
+     * @brief Method to set the value of setting.
+     * @param status : status of the setting
+     */
 
     @Override
     public void setSetting(boolean status) {
@@ -77,24 +120,21 @@ public class CameraSettingModel implements ICameraSettingModel{
     }
 
     @Override
-    public boolean getSettings(int status) {
-        boolean c = false;
+    public boolean getSettings() {
+        boolean setStatus = false;
         try {
-            mServiceCameraInterface.getSettings(status);
+            mServiceCameraInterface.getSettings();
         } catch (RemoteException e) {
             e.printStackTrace();
         }
-        return c;
+        return setStatus;
     }
 
 
-//    @Override
-//    public void startCamera() {
-//        try {
-//            mServiceCameraInterface.startCamera();
-//        } catch (RemoteException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    /**
+     * @brief Method to get previous active camera
+     * @return setStatus : status
+     */
+
 }
 

@@ -1,14 +1,17 @@
 package com.example.project_camera_01.presenter;
 
+import java.util.HashMap;
+
 public interface ICameraSettingPresenter {
 
-//    void setSetting(int checkStatus);
-
-
-//    void getSetting(String name,Boolean check);
-
-    void setSetting(boolean status);
-    boolean getSettings(int status);
-
-
+    /**
+     * @brief Method to set the value of setting.
+     * @param status : status of setting.
+     */
+    void setSetting(Boolean status);
+    /**
+     * @brief Method to get the value of setting.
+     *
+     */
+    boolean getSettings();
 }
