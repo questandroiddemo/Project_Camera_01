@@ -48,6 +48,15 @@ public class CameraModel implements ICameraModel {
         }
     };
 
+
+    /**
+     * @brief Constructor of CameraRvcModelImpl
+     */
+    public CameraModel(CameraPresenter cameraPresenter) {
+
+        mCameraPresenter = cameraPresenter;
+    }
+
     /**
      * variable to store object of ServiceConnection.
      */
@@ -87,13 +96,6 @@ public class CameraModel implements ICameraModel {
 
     };
 
-    /**
-     * @brief Constructor of CameraRvcModelImpl
-     */
-    public CameraModel(CameraPresenter cameraPresenter) {
-
-        mCameraPresenter = cameraPresenter;
-    }
 
     /**
      * @brief Method to initialize this class.

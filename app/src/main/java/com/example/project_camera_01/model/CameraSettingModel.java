@@ -119,6 +119,10 @@ public class CameraSettingModel implements ICameraSettingModel{
         }
     }
 
+    /**
+     * @brief Method to get previous active camera
+     * @return setStatus : status
+     */
     @Override
     public boolean getSettings() {
         boolean setStatus = false;
@@ -131,10 +135,7 @@ public class CameraSettingModel implements ICameraSettingModel{
     }
 
 
-    /**
-     * @brief Method to get previous active camera
-     * @return setStatus : status
-     */
+
 
 }
 
