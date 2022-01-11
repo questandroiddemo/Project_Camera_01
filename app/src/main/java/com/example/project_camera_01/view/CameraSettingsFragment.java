@@ -113,17 +113,10 @@ public class CameraSettingsFragment extends Fragment implements ICameraSetting {
      * @brief Function used to set the value of setting in to the server.
      * @param : status : true or false.
      */
-    HashMap<Integer,Boolean> hash_map = new HashMap<Integer,Boolean>();
 
-    public HashMap<Integer, Boolean> getHash_map() {
-        return hash_map;
-    }
 
     @Override
     public void setSetting(boolean status) {
-        hash_map.put(CameraConstants.delaySetting,dataModel.isSelected());
-        hash_map.put(CameraConstants.guidLineSetting,dataModel.isSelected());
-
         mCameraSettingPresenter.setSetting(status);
     }
 
