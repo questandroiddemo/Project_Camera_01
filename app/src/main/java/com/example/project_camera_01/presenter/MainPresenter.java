@@ -51,32 +51,6 @@ public class MainPresenter implements IMainPresenter {
 
 
     }
-    /**
-     * @brief Method to get previous active camera
-     * @return camera : camera
-     */
-
-    @Override
-    public String getPreviousActiveCamera() {
-        return mCameraModel.getPreviousActiveCamera();
-    }
-
-//    /**
-//     * @brief Method to notify camera status.
-//     * @param status : status of camera.
-//     */
-//    @Override
-//    public void notifyCameraStatus(boolean status) {
-//        mCameraView.notifyCameraStatus(status);
-//    }
-//
-//    /**
-//     * @brief Method to start camera
-//     */
-//    @Override
-//    public void startCamera() {
-//        mCameraModel.startCamera();
-//    }
 
 
 }

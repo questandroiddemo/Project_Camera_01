@@ -11,17 +11,5 @@ public interface IMainModel {
      */
     void initialize(Context context);
 
-    /**
-     * @brief Method to get previous active camera
-     * @return camera : camera
-     */
-
-    String getPreviousActiveCamera();
-
-//    /**
-//     * @brief Method to start camera
-//     */
-//
-//    void startCamera();
 
 }

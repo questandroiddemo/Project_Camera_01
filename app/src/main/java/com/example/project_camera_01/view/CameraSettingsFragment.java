@@ -60,8 +60,7 @@ public class CameraSettingsFragment extends Fragment implements ICameraSettingVi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-       Log.d("CRDS","service connected bts"+container);
+
         rootView = inflater.inflate(R.layout.fragment_camera_settings, container, false);
         listView = (ListView)rootView.findViewById(R.id.listView);
         mCameraSettingPresenter = new CameraSettingPresenter(this);
@@ -77,9 +76,6 @@ public class CameraSettingsFragment extends Fragment implements ICameraSettingVi
     private void displayListView() {
 
         hashMap = mCameraSettingPresenter.getSettings();
-        Log.d("inget","in the setting"+hashMap);
-
-
         cameraList.add(new DataModel("Camera Delay Settings","",hashMap.get("Camera Delay Settings")));
         cameraList.add(new DataModel("Camera Static Guideline Settings","",hashMap.get("Camera Static Guideline Settings")));
         cameraList.add(new DataModel("Swing Door Settings","",hashMap.get("Swing Door Settings")));
@@ -98,13 +94,9 @@ public class CameraSettingsFragment extends Fragment implements ICameraSettingVi
                 CheckBox cb = (CheckBox) view.findViewById(R.id.checkBox);
                 cb.setChecked(!cb.isChecked());
                 String c = dataModel.getCode();
-                Log.d("SetStatus","Value got?"+c);
-                Toast.makeText(getContext(),
-                        ""+dataModel.getCode()+" is "+cb.isChecked(),
-                        Toast.LENGTH_LONG).show();
                mCameraSettingPresenter.setSetting(dataModel.getCode(),cb.isChecked());
                mCameraSettingPresenter.setSetting("Camera Static Guideline Settings",cb.isChecked());
-                Log.d("SetStatus","Value got?"+getId());
+
             }
         });
 
@@ -127,10 +119,10 @@ public class CameraSettingsFragment extends Fragment implements ICameraSettingVi
             public void run() {
                 if (status ) {
 
-                    Toast.makeText(getContext(), "Camera started", Toast.LENGTH_SHORT).show();
+                    Log.d("notifyCameraSetting","Notifying HMI");
                 }
                 else{
-                    Toast.makeText(getContext(), "Camera stopped" , Toast.LENGTH_SHORT).show();
+                    Log.d("notifyCameraSetting","cannot Notifying HMI");
                 }
             }
         });

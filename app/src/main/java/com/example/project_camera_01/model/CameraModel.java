@@ -24,9 +24,9 @@ public class CameraModel implements ICameraModel {
 
 
     @Override
-    public void startCamera(String camId) {
+    public void setCamera(String camId) {
         try {
-            mServiceCameraInterface.startCamera(camId);
+            mServiceCameraInterface.setCamera(camId);
         } catch (RemoteException e) {
             e.printStackTrace();
         }

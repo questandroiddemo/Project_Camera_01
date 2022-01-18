@@ -99,7 +99,6 @@ public class MainFragment extends Fragment implements IMainView {
             vpAdapter.addFragment(new CameraFragment(),"Camera");
             vpAdapter.addFragment(new CameraSettingsFragment(),"Camera settings");
             viewPager.setAdapter(vpAdapter);
-            String previous = mCameraPresenter.getPreviousActiveCamera();
             Log.d("CameraService","OnBind");
 
 

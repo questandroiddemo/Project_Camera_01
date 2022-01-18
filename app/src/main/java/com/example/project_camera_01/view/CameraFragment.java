@@ -50,6 +50,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.cameraserviceinterface.CamConstants;
 import com.example.project_camera_01.R;
 import com.example.project_camera_01.presenter.CameraPresenter;
 import com.example.project_camera_01.presenter.CameraSettingPresenter;
@@ -57,7 +58,7 @@ import com.example.project_camera_01.presenter.ICameraPresenter;
 import com.example.project_camera_01.presenter.ICameraSettingPresenter;
 import com.example.project_camera_01.presenter.IMainPresenter;
 import com.example.project_camera_01.presenter.MainPresenter;
-
+import com.example.cameraserviceinterface.CamConstants.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -197,14 +198,14 @@ public class CameraFragment extends Fragment implements View.OnClickListener,ICa
         boolean a = hashMap.get("Camera Delay Settings");
         boolean b = hashMap.get("Camera Static Guideline Settings");
         if (a == true && b == true){
-            mHelptext.setText("Camera Delay Settings is ON"+" and Camera Static Guideline Settings is ON");
+            mHelptext.setText("Check Surrounding : Camera Delay is ON"+" and Static Guideline  is ON");
         }else if(a == true && b == false){
-            mHelptext.setText("Camera Delay Settings is ON"+" and Camera Static Guideline Settings is OFF");
+            mHelptext.setText("Check Surrounding : Camera Delay is ON"+" and Static Guideline is OFF");
         }else if(a == false && b == true){
-            mHelptext.setText("Camera Delay Settings is OFF"+" and Camera Static Guideline Settings is ON");
+            mHelptext.setText("Check Surrounding : Camera Delay is OFF"+" and Static Guideline is ON");
         }
         else {
-            mHelptext.setText("Camera Delay Settings is OFF"+" and Camera Static Guideline Settings is OFF");
+            mHelptext.setText("Check Surrounding : Camera Delay is OFF"+" and Static Guideline is OFF");
         }
 
     }
@@ -213,73 +214,99 @@ public class CameraFragment extends Fragment implements View.OnClickListener,ICa
      * @brief Function used to set the button click
      * @param : v:View
      */
+      public String camId = null;
+
+    public void getRvc(){
+        mTitle.setText("REAR VIEW CAMERA");
+
+        mRvc.setBackgroundColor(getResources().getColor(R.color.primary1));
+        mFfc.setBackgroundColor(getResources().getColor(R.color.primary));
+        mCargo.setBackgroundColor(getResources().getColor(R.color.primary));
+        mAux.setBackgroundColor(getResources().getColor(R.color.primary));
+        mFrameLayout.setBackground(null);
+        mRotate = "null";
+        mHelptext.setText(null);
+        camId = "1";
+        Log.d("RVC","startCamera id"+mCameraId);
+        if (mTextureView.isAvailable()) {
+            String c =setupCamera(mTextureView.getWidth(), mTextureView.getHeight());
+
+            updateCamera();
+            connectCamera("1");
+
+        } else {
+            mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
+        }
+
+    }
+
+    public void getFfc(){
+        mTitle.setText("FORWARD FACING CAMERA");
+        mHelptext.setText(null);
+        mRvc.setBackgroundColor(getResources().getColor(R.color.primary));
+        mFfc.setBackgroundColor(getResources().getColor(R.color.primary1));
+        mCargo.setBackgroundColor(getResources().getColor(R.color.primary));
+        mAux.setBackgroundColor(getResources().getColor(R.color.primary));
+        mFrameLayout.setBackground(null);
+        mRotate = "fulfilled";
+        camId = "0";
+        Log.d("FFC","startCamera id"+mCameraId);
+        if (mTextureView.isAvailable()) {
+           String c = setupCamera(mTextureView.getWidth(), mTextureView.getHeight());
+            updateCamera();
+            connectCamera("0");
+        } else {
+            mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
+
+        }
+    }
+
+    public void getCargo(){
+        mTitle.setText("CARGO CAMERA");
+        mHelptext.setText("Camera is unavailable");
+        mRvc.setBackgroundColor(getResources().getColor(R.color.primary));
+        mFfc.setBackgroundColor(getResources().getColor(R.color.primary));
+        mCargo.setBackgroundColor(getResources().getColor(R.color.primary2));
+        mAux.setBackgroundColor(getResources().getColor(R.color.primary));
+        camId = "2";
+        Log.d("CARGO","startCamera id"+mCameraId);
+        closeCamera();
+        mTextureView.setOpaque(false);
+        mFrameLayout.setBackgroundColor(Color.BLUE);
+    }
+
+    public void getAux(){
+        mTitle.setText("AUX CAMERA");
+        mHelptext.setText("Camera is unavailable");
+        mRvc.setBackgroundColor(getResources().getColor(R.color.primary));
+        mFfc.setBackgroundColor(getResources().getColor(R.color.primary));
+        mCargo.setBackgroundColor(getResources().getColor(R.color.primary));
+        mAux.setBackgroundColor(getResources().getColor(R.color.primary2));
+        mTextureView.setOpaque(false);
+        camId = "3";
+        Log.d("AUX","startCamera id"+mCameraId);
+        closeCamera();
+        mFrameLayout.setBackgroundColor(Color.BLUE);
+    }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.rvc:
-                mTitle.setText("REAR VIEW CAMERA");
-
-                mRvc.setBackgroundColor(getResources().getColor(R.color.primary1));
-                mFfc.setBackgroundColor(getResources().getColor(R.color.primary));
-                mCargo.setBackgroundColor(getResources().getColor(R.color.primary));
-                mAux.setBackgroundColor(getResources().getColor(R.color.primary));
-                mFrameLayout.setBackground(null);
-                mRotate = "null";
-                mHelptext.setText(null);
-                if (mTextureView.isAvailable()) {
-                    setupCamera(mTextureView.getWidth(), mTextureView.getHeight());
-
-                    updateCamera();
-                    connectCamera("1");
-
-                } else {
-                    mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
-                }
-
+                getRvc();
                 break;
             case R.id.ffc:
-                mTitle.setText("FORWARD FACING CAMERA");
-                mHelptext.setText(null);
-                mRvc.setBackgroundColor(getResources().getColor(R.color.primary));
-                mFfc.setBackgroundColor(getResources().getColor(R.color.primary1));
-                mCargo.setBackgroundColor(getResources().getColor(R.color.primary));
-                mAux.setBackgroundColor(getResources().getColor(R.color.primary));
-                mFrameLayout.setBackground(null);
-                mRotate = "fulfilled";
-                if (mTextureView.isAvailable()) {
-                    setupCamera(mTextureView.getWidth(), mTextureView.getHeight());
-                    updateCamera();
-                    connectCamera("0");
-                } else {
-                    mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
-
-                }
+                getFfc();
 
                 break;
             case R.id.cargo:
-                mTitle.setText("CARGO CAMERA");
-                mHelptext.setText("Camera is unavailable");
-                mRvc.setBackgroundColor(getResources().getColor(R.color.primary));
-                mFfc.setBackgroundColor(getResources().getColor(R.color.primary));
-                mCargo.setBackgroundColor(getResources().getColor(R.color.primary2));
-                mAux.setBackgroundColor(getResources().getColor(R.color.primary));
-                closeCamera();
-                mTextureView.setOpaque(false);
-                mFrameLayout.setBackgroundColor(Color.BLUE);
+                getCargo();
                 break;
             case R.id.aux:
-                mTitle.setText("AUX CAMERA");
-                mHelptext.setText("Camera is unavailable");
-                mRvc.setBackgroundColor(getResources().getColor(R.color.primary));
-                mFfc.setBackgroundColor(getResources().getColor(R.color.primary));
-                mCargo.setBackgroundColor(getResources().getColor(R.color.primary));
-                mAux.setBackgroundColor(getResources().getColor(R.color.primary2));
-                mTextureView.setOpaque(false);
-                closeCamera();
-                mFrameLayout.setBackgroundColor(Color.BLUE);
+                getAux();
                 break;
-
+            default:
+                Log.d("DEFAULT","this is not handled");
 
         }
     }
@@ -294,8 +321,8 @@ public class CameraFragment extends Fragment implements View.OnClickListener,ICa
         super.onPause();
         closeCamera();
         stopBackgroundThread();
-        mCameraPresenter.startCamera(mCameraId);
-        Log.d("ActiveCameraID","startCamera id"+mCameraId);
+        mCameraPresenter.setCamera(camId);
+        Log.d("ActiveCameraID","startCamera id"+camId);
 
     }
 
@@ -319,19 +346,33 @@ public class CameraFragment extends Fragment implements View.OnClickListener,ICa
 
     @Override
     public void onResume() {
-
-
         super.onResume();
         startBackgroundThread();
         if (mTextureView.isAvailable()) {
            hashMap = mCameraSettingPresenter.getSettings();
             mPreviousCamera = mCameraPresenter.getCamera();
            updateCamera();
-            setupCamera(mTextureView.getWidth(), mTextureView.getHeight());
-            connectCamera(mPreviousCamera);
+            switch (mPreviousCamera) {
+                case "1":
+                    getRvc();
+                    break;
+                case "0":
+                    getFfc();
+                    break;
+                case "2":
+                    getCargo();
+                    break;
+                case "3":
+                    getAux();
+                    break;
+                default:
+                    Log.d("DEFAULT", "this is not handled");
+
+            }
         } else {
             mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
         }
+
     }
 
 
@@ -405,9 +446,6 @@ public class CameraFragment extends Fragment implements View.OnClickListener,ICa
         public void onOpened(@NonNull CameraDevice cameraDevice) {
             mCameraDevice = cameraDevice;
             startPreview();
-//            mTitle.setText("REAR VIEW CAMERA");
-//            mHelptext.setText("Check entire Surroundings.");
-
         }
 
         /**
@@ -477,7 +515,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener,ICa
      *
      *
      */
-    private void setupCamera(int width, int height) {
+    private String setupCamera(int width, int height) {
         CameraManager cameraManager = (CameraManager) getActivity().getSystemService(Context.CAMERA_SERVICE);
         try {
 
@@ -500,15 +538,16 @@ public class CameraFragment extends Fragment implements View.OnClickListener,ICa
                 cameraId = cameraManager.getCameraIdList()[0];
                 mCameraId = cameraId;
                 Log.d("frontCamera","open front camera"+mCameraId);
-//                mRotate = null;
+                mRotate = null;
                 closeCamera();
             }
 
-            return;
+
 
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
+        return mCameraId;
     }
 
 

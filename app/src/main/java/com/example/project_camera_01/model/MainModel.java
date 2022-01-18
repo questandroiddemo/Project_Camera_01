@@ -35,17 +35,7 @@ public class MainModel implements IMainModel {
      * variable to store object of IBaseAidlInterface.
      */
     private IBaseAidlInterface mBaseAidlInterface;
-//    private ConnectUtil mConnectUtil = new ConnectUtil();
-    /**
-     * variable to store object of ICameraListener.
-     */
-//    private ICameraListener mCameraListener = new ICameraListener.Stub() {
-//        @Override
-//        public void notifyCameraStatus(boolean status) throws RemoteException {
-//            Log.d(TAG, "Inside notifyCameraStatus:" + status);
-//            mCameraPresenter.notifyCameraStatus(status);
-//        }
-//    };
+
 
 
     /**
@@ -69,16 +59,10 @@ public class MainModel implements IMainModel {
          */
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            Log.d("SERVICE","connected");
-
             mBaseAidlInterface = IBaseAidlInterface.Stub.asInterface(service);
             mServiceCameraInterface = mCameraServiceInterface.getCameraInterface();
-//            mConnectUtil.setmBaseAidlInterface(mBaseAidlInterface);
-//            mConnectUtil.setmServiceCameraInterface(mServiceCameraInterface);
             ConnectUtil.setmServiceCameraInterface(mServiceCameraInterface);
             ConnectUtil.setmBaseAidlInterface(mBaseAidlInterface);
-            Log.d("STAY","interfaces are here"+mBaseAidlInterface);
-            Log.d("STAY2","interfaces are here"+mServiceCameraInterface);
             mCameraPresenter.updateBindStatus(BIND_SUCCESS);
         }
 
@@ -109,34 +93,5 @@ public class MainModel implements IMainModel {
         mCameraServiceInterface.bindServiceApp();
 
     }
-
-
-    /**
-     * @brief Method to get previous active camera
-     * @return camera : camera
-     */
-    @Override
-    public String getPreviousActiveCamera() {
-
-        String camera = null;
-        try {
-            camera = mServiceCameraInterface.getPreviousActiveCamera();
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-        Log.d(TAG,"getPreviousActiveCamera:"+camera);
-        return camera;
-    }
-//    /**
-//     * @brief Method to start camera.
-//     */
-//    @Override
-//    public void startCamera() {
-//        try {
-//            mServiceCameraInterface.startCamera();
-//        } catch (RemoteException e) {
-//            e.printStackTrace();
-//        }
-//    }
 
 }

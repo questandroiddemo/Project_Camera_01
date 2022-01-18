@@ -14,23 +14,4 @@ public interface IMainPresenter {
      * @param bindStatus : bind status
      */
     void updateBindStatus(int bindStatus);
-    /**
-     * @brief Method to get previous active camera
-     * @return camera : camera
-     */
-
-    String getPreviousActiveCamera();
-
-//    /**
-//     * @brief Method to notify camera status.
-//     * @param status : status of camera.
-//     */
-//
-//    void notifyCameraStatus(boolean status);
-//    /**
-//     * @brief Method to start camera
-//     */
-//    void startCamera();
-
-
 }

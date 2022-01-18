@@ -19,9 +19,9 @@ public class CameraPresenter implements ICameraPresenter{
     }
 
     @Override
-    public void startCamera(String camId) {
+    public void setCamera(String camId) {
         Log.d("BTSSTAY","started camera"+camId);
-        mCameraModel.startCamera(camId);
+        mCameraModel.setCamera(camId);
     }
 
     @Override

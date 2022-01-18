@@ -7,10 +7,6 @@ public interface IMainView {
      * @param bindStatus : bind status
      */
     void updateBindStatus(int bindStatus);
-//    /**
-//     * @brief Method to notify camera status.
-//     * @param status : status of camera.
-//     */
-//    void notifyCameraStatus(boolean status);
+
 
 }
