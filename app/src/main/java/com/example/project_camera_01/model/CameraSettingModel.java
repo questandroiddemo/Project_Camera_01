@@ -1,22 +1,17 @@
 package com.example.project_camera_01.model;
 
-import static com.example.project_camera_01.common.CameraConstants.TAG;
-
-import android.content.ComponentName;
-import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
-import static com.example.project_camera_01.common.CameraConstants.BIND_FAIL;
-import static com.example.project_camera_01.common.CameraConstants.BIND_SUCCESS;
 
 import com.example.cameraserviceinterface.CameraServiceInterface;
 import com.example.cameraserviceinterface.IBaseAidlInterface;
 import com.example.cameraserviceinterface.ICameraListener;
 import com.example.cameraserviceinterface.IServiceCameraInterface;
 import com.example.project_camera_01.presenter.CameraSettingPresenter;
-import com.example.project_camera_01.presenter.ICameraPresenter;
+import com.example.project_camera_01.presenter.IMainPresenter;
 import com.example.project_camera_01.presenter.ICameraSettingPresenter;
-import com.example.project_camera_01.view.CameraFragment;
+
+import java.util.HashMap;
 
 public class CameraSettingModel implements ICameraSettingModel{
 
@@ -44,7 +39,9 @@ public class CameraSettingModel implements ICameraSettingModel{
     /**
      * variable to store object of ICameraPresenter.
      */
-    private ICameraPresenter mCameraPresenter;
+    private IMainPresenter mCameraPresenter;
+
+   private ConnectUtil mConnectUtil = new ConnectUtil();
 
     /**
      * @brief Constructor of CameraSettingModel
@@ -52,68 +49,36 @@ public class CameraSettingModel implements ICameraSettingModel{
     public CameraSettingModel(CameraSettingPresenter cameraSettingPresenter) {
 
         mCameraSettingPresenter = cameraSettingPresenter;
+        mBaseAidlInterface = ConnectUtil.getmBaseAidlInterface();
+        mServiceCameraInterface = ConnectUtil.getmServiceCameraInterface();
+        try {
+            mServiceCameraInterface.registerAsyncConnection(mCameraListener);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        Log.d("HMI1","mBaseAidl"+mBaseAidlInterface);
+        Log.d("HMI2", "mServiceInterface"+mServiceCameraInterface);
     }
 
-    /**
-     * variable to store object of ICameraListener.
-     */
     private ICameraListener mCameraListener = new ICameraListener.Stub() {
-
         @Override
-        public void notifyCameraStatus(boolean status) throws RemoteException {
-            Log.d(TAG, "Inside notifyCameraStatus:" + status);
-            mCameraPresenter.notifyCameraStatus(status);
+        public void notifyCameraSetting(String setId, boolean status) throws RemoteException {
+            Log.d("CameraSetting", "Inside notifyCameraStatus:" + status);
+
+            mCameraSettingPresenter.notifyCameraSetting(setId,status);
+
         }
 
     };
-
-
-    /**
-     * variable to store object of ServiceConnection.
-     */
-    private CameraServiceInterface.IServiceConnectionCallback mConnectionCallBack = new CameraServiceInterface.IServiceConnectionCallback() {
-
-        /**
-         * @brief Call back method onServiceConnected, for bind service call
-         * @param name : component name
-         * @param service : service
-         */
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-
-            mBaseAidlInterface = IBaseAidlInterface.Stub.asInterface(service);
-            mServiceCameraInterface = mCameraServiceInterface.getCameraInterface();
-            if (mBaseAidlInterface != null) {
-                try {
-                    mBaseAidlInterface.registerAsyncConnection(mCameraListener);
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                }
-            }
-            mCameraPresenter.updateBindStatus(BIND_SUCCESS);
-        }
-
-        /**
-         * @brief Call back method onServiceDisconnected
-         * @param name : component name
-         */
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            mCameraPresenter.updateBindStatus(BIND_FAIL);
-        }
-    };
-
-
     /**
      * @brief Method to set the value of setting.
      * @param status : status of the setting
+     * @return
      */
-
     @Override
-    public void setSetting(boolean status) {
-
+    public void setSetting(String setId, boolean status) {
         try {
-            mServiceCameraInterface.setSetting(status);
+            mServiceCameraInterface.setSetting(setId,status);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -124,18 +89,14 @@ public class CameraSettingModel implements ICameraSettingModel{
      * @return setStatus : status
      */
     @Override
-    public boolean getSettings(int status) {
-        boolean setStatus = false;
+    public HashMap<String, Boolean> getSettings() {
+        HashMap<String,Boolean> hashMap = new HashMap<>();
         try {
-            mServiceCameraInterface.getSettings();
+            hashMap = (HashMap<String, Boolean>) mServiceCameraInterface.getSettings();
         } catch (RemoteException e) {
             e.printStackTrace();
         }
-        return setStatus;
+        return hashMap;
     }
-
-
-
-
 }
 

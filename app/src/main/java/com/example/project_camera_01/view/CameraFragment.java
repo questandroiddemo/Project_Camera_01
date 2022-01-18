@@ -37,6 +37,7 @@ import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
@@ -49,16 +50,19 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.project_camera_01.CustomAdapter;
-import com.example.project_camera_01.DataModel;
 import com.example.project_camera_01.R;
+import com.example.project_camera_01.presenter.CameraPresenter;
+import com.example.project_camera_01.presenter.CameraSettingPresenter;
 import com.example.project_camera_01.presenter.ICameraPresenter;
 import com.example.project_camera_01.presenter.ICameraSettingPresenter;
+import com.example.project_camera_01.presenter.IMainPresenter;
+import com.example.project_camera_01.presenter.MainPresenter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -68,7 +72,7 @@ import java.util.List;
  */
 
 
-public class CameraFragment extends Fragment implements View.OnClickListener{
+public class CameraFragment extends Fragment implements View.OnClickListener,ICameraView,ICameraSettingView{
 
 
     /**
@@ -134,6 +138,8 @@ public class CameraFragment extends Fragment implements View.OnClickListener{
     private Size mPreviewSize;
 
     ICameraSettingPresenter mCameraSettingPresenter;
+    ICameraPresenter mCameraPresenter;
+    IMainPresenter mMainPresenter;
 
 
     /**
@@ -148,7 +154,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener{
      * @param savedInstanceState :  Object of Bundle
      * @return
      */
-
+    HashMap<String,Boolean> hashMap;
 
 
     @Override
@@ -159,8 +165,8 @@ public class CameraFragment extends Fragment implements View.OnClickListener{
          * variable to store view.
          */
         View mView = inflater.inflate(R.layout.fragment_camera, container, false);
-
-
+        mCameraPresenter = new CameraPresenter(this);
+        mCameraSettingPresenter = new CameraSettingPresenter(this);
 
         mTitle = mView.findViewById(R.id.title);
         mHelptext = mView.findViewById(R.id.helptext);
@@ -176,7 +182,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener{
         mTextureView.setRotation(-90);
         mFrameLayout = mView.findViewById(R.id.frameLayout);
         mFrameLayout.setRotation(-90);
-
+        hashMap = new HashMap<String,Boolean>();
 
 
         return mView;
@@ -194,15 +200,14 @@ public class CameraFragment extends Fragment implements View.OnClickListener{
         switch (v.getId()) {
             case R.id.rvc:
                 mTitle.setText("REAR VIEW CAMERA");
-                mHelptext.setText("Check entire Surrondings.");
+
                 mRvc.setBackgroundColor(getResources().getColor(R.color.primary1));
                 mFfc.setBackgroundColor(getResources().getColor(R.color.primary));
                 mCargo.setBackgroundColor(getResources().getColor(R.color.primary));
                 mAux.setBackgroundColor(getResources().getColor(R.color.primary));
                 mFrameLayout.setBackground(null);
                 mRotate = "null";
-
-
+                mHelptext.setText("Check entire Surrondings.");
                 if (mTextureView.isAvailable()) {
                     setupCamera(mTextureView.getWidth(), mTextureView.getHeight());
                     connectCamera("1");
@@ -236,7 +241,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener{
                 break;
             case R.id.cargo:
                 mTitle.setText("CARGO CAMERA");
-                mHelptext.setText("Check entire Surrondings.");
+                mHelptext.setText("Camera is unavailable");
                 mRvc.setBackgroundColor(getResources().getColor(R.color.primary));
                 mFfc.setBackgroundColor(getResources().getColor(R.color.primary));
                 mCargo.setBackgroundColor(getResources().getColor(R.color.primary2));
@@ -247,7 +252,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener{
                 break;
             case R.id.aux:
                 mTitle.setText("AUX CAMERA");
-                mHelptext.setText("Check entire Surrondings.");
+                mHelptext.setText("Camera is unavailable");
                 mRvc.setBackgroundColor(getResources().getColor(R.color.primary));
                 mFfc.setBackgroundColor(getResources().getColor(R.color.primary));
                 mCargo.setBackgroundColor(getResources().getColor(R.color.primary));
@@ -272,6 +277,11 @@ public class CameraFragment extends Fragment implements View.OnClickListener{
         closeCamera();
 
         stopBackgroundThread();
+        if (mTitle.equals("REAR VIEW CAMERA")){
+            mCameraPresenter.startCamera("0");
+        }else if(mTitle.equals("FORWARD FACING CAMERA")){
+            mCameraPresenter.startCamera("1");
+        }
 
     }
 
@@ -300,10 +310,21 @@ public class CameraFragment extends Fragment implements View.OnClickListener{
         super.onResume();
         startBackgroundThread();
         if (mTextureView.isAvailable()) {
-
+           hashMap = mCameraSettingPresenter.getSettings();
+           boolean a = hashMap.get("Camera Delay Settings");
+           boolean b = hashMap.get("Camera Static Guideline Settings");
+           if (a == true && b == true){
+               mHelptext.setText("Camera Delay Settings is ON"+" and Camera Static Guideline Settings is ON");
+           }else if(a == true && b == false){
+               mHelptext.setText("Camera Delay Settings is ON"+" and Camera Static Guideline Settings is OFF");
+           }else if(a == false && b == true){
+               mHelptext.setText("Camera Delay Settings is OFF"+" and Camera Static Guideline Settings is ON");
+           }
+           else {
+               mHelptext.setText("Camera Delay Settings is OFF"+" and Camera Static Guideline Settings is OFF");
+           }
             setupCamera(mTextureView.getWidth(), mTextureView.getHeight());
             connectCamera("1");
-//            mCameraSettingPresenter.getSettings();
         } else {
             mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
         }
@@ -382,8 +403,6 @@ public class CameraFragment extends Fragment implements View.OnClickListener{
             startPreview();
             mTitle.setText("REAR VIEW CAMERA");
             mHelptext.setText("Check entire Surroundings.");
-            Toast.makeText(getContext(), "Camera connected!", Toast.LENGTH_LONG).show();
-
 
         }
 
@@ -423,6 +442,11 @@ public class CameraFragment extends Fragment implements View.OnClickListener{
         ORIENTATIONS.append(Surface.ROTATION_90, 90);
         ORIENTATIONS.append(Surface.ROTATION_180, 180);
         ORIENTATIONS.append(Surface.ROTATION_270, 270);
+    }
+
+    @Override
+    public void notifyCameraSetting(String setId, boolean status) {
+
     }
 
     /**

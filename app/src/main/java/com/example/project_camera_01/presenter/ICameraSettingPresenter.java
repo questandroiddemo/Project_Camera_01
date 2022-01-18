@@ -7,11 +7,17 @@ public interface ICameraSettingPresenter {
     /**
      * @brief Method to set the value of setting.
      * @param status : status of setting.
+     * @return
      */
-    void setSetting(Boolean status);
+    void setSetting(String setId,boolean status);
+    /**
+     * @brief Method to notify HMI.
+     *
+     */
+    void notifyCameraSetting(String setId,boolean status);
     /**
      * @brief Method to get the value of setting.
      *
      */
-    boolean getSettings(int status);
+    HashMap<String, Boolean> getSettings();
 }

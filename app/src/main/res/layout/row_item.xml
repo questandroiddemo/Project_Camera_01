@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/relative_layout_id">
     <TextView
         android:id="@+id/txtName"
         android:layout_width="wrap_content"
@@ -9,6 +10,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
+        android:textIsSelectable="false"
         android:textSize="20sp" />
 
     <CheckBox
@@ -18,6 +20,8 @@
         android:buttonTint="#03A9F4"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
+        android:focusable="false"
+        android:clickable="false"
         android:layout_alignParentTop="true" />
 
 </RelativeLayout>

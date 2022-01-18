@@ -3,11 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.CameraSettingsFragment">
+    tools:context=".view.CameraSettingsFragment"
+    android:descendantFocusability="blocksDescendants">
 
     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="594dp"
+        android:isIndicator="true"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         android:layout_marginTop="30dp" />
 </FrameLayout>

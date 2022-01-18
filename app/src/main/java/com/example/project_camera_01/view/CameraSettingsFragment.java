@@ -1,14 +1,15 @@
 package com.example.project_camera_01.view;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -16,14 +17,15 @@ import com.example.project_camera_01.CustomAdapter;
 import com.example.project_camera_01.DataModel;
 import com.example.project_camera_01.R;
 import com.example.project_camera_01.common.CameraConstants;
-import com.example.project_camera_01.presenter.ICameraPresenter;
+import com.example.project_camera_01.model.ConnectUtil;
+import com.example.project_camera_01.presenter.CameraSettingPresenter;
 import com.example.project_camera_01.presenter.ICameraSettingPresenter;
-import com.example.project_camera_01.common.CameraConstants.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class CameraSettingsFragment extends Fragment implements ICameraSetting {
+public class CameraSettingsFragment extends Fragment implements ICameraSettingView {
 
     /**
      * variable to store CustomAdapter object.
@@ -44,13 +46,10 @@ public class CameraSettingsFragment extends Fragment implements ICameraSetting {
      * variable to store ICameraSettingPresenter object.
      */
     ICameraSettingPresenter mCameraSettingPresenter;
-
     /**
      * variable to store DataModel object.
      */
-
-    DataModel dataModel;
-
+    private volatile boolean called;
     /**
      * @Brief Fragment lifecycle method onCreateView
      * @param inflater           :  Object of LayoutInflater
@@ -62,32 +61,30 @@ public class CameraSettingsFragment extends Fragment implements ICameraSetting {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+       Log.d("CRDS","service connected bts"+container);
         rootView = inflater.inflate(R.layout.fragment_camera_settings, container, false);
         listView = (ListView)rootView.findViewById(R.id.listView);
-        displayListView();
-
-
+        mCameraSettingPresenter = new CameraSettingPresenter(this);
 
         return rootView;
     }
-
-
-
 
     /**
      * @brief Function used display the list of settings.
      *
      */
-
+    ArrayList<DataModel> cameraList = new ArrayList<DataModel>();
     private void displayListView() {
 
-        ArrayList<DataModel> cameraList = new ArrayList<DataModel>();
+        hashMap = mCameraSettingPresenter.getSettings();
+        Log.d("inget","in the setting"+hashMap);
 
-        cameraList.add(new DataModel("Camera Delay Settings","",false));
-        cameraList.add(new DataModel("Camera Static Guideline Settings","",false));
-        cameraList.add(new DataModel("Swing Door Settings","",false));
-        cameraList.add(new DataModel("Cargo Cam Dynamic Center lines","",false));
-        cameraList.add(new DataModel("Trailer Camera Settings","",false));
+
+        cameraList.add(new DataModel("Camera Delay Settings","",hashMap.get("Camera Delay Settings")));
+        cameraList.add(new DataModel("Camera Static Guideline Settings","",hashMap.get("Camera Static Guideline Settings")));
+        cameraList.add(new DataModel("Swing Door Settings","",hashMap.get("Swing Door Settings")));
+        cameraList.add(new DataModel("Cargo Cam Dynamic Center lines","",hashMap.get("Cargo Cam Dynamic Center lines")));
+        cameraList.add(new DataModel("Trailer Camera Settings","", hashMap.get("Trailer Camera Settings")));
 
         dataAdapter = new CustomAdapter(getContext(), R.layout.row_item, cameraList);
         // Assign adapter to ListView
@@ -97,27 +94,48 @@ public class CameraSettingsFragment extends Fragment implements ICameraSetting {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 DataModel dataModel = (DataModel) parent.getItemAtPosition(position);
+
+                CheckBox cb = (CheckBox) view.findViewById(R.id.checkBox);
+                cb.setChecked(!cb.isChecked());
+                String c = dataModel.getCode();
+                Log.d("SetStatus","Value got?"+c);
                 Toast.makeText(getContext(),
-                        "Clicked on Row: " + dataModel.getCode(),
+                        ""+dataModel.getCode()+" is "+cb.isChecked(),
                         Toast.LENGTH_LONG).show();
-
-
+               mCameraSettingPresenter.setSetting(dataModel.getCode(),cb.isChecked());
+               mCameraSettingPresenter.setSetting("Camera Static Guideline Settings",cb.isChecked());
+                Log.d("SetStatus","Value got?"+getId());
             }
         });
 
     }
 
-
-
-    /**
-     * @brief Function used to set the value of setting in to the server.
-     * @param : status : true or false.
-     */
-
-
     @Override
-    public void setSetting(boolean status) {
-        mCameraSettingPresenter.setSetting(status);
+    public void onResume() {
+        super.onResume();
+        if (called) return;
+        called = true;
+        displayListView();
+
     }
+
+    HashMap<String, Boolean> hashMap = new HashMap<>();
+    @Override
+    public void notifyCameraSetting(String setId, boolean status) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (status ) {
+
+                    Toast.makeText(getContext(), "Camera started", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(getContext(), "Camera stopped" , Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+
 
 }

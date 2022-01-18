@@ -1,8 +1,6 @@
 package com.example.project_camera_01;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,14 +13,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.project_camera_01.common.CameraConstants;
+import com.example.project_camera_01.common.CameraConstants.*;
+import com.example.project_camera_01.model.ICameraSettingModel;
 import com.example.project_camera_01.presenter.ICameraSettingPresenter;
-import com.example.project_camera_01.view.CameraFragment;
-import com.example.project_camera_01.view.ICameraSetting;
-import com.example.project_camera_01.view.ICameraView;
-import com.example.project_camera_01.view.MainFragment;
+import com.example.project_camera_01.view.ICameraSettingView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class CustomAdapter extends ArrayAdapter<DataModel>{
 
@@ -31,6 +28,8 @@ public class CustomAdapter extends ArrayAdapter<DataModel>{
      * variable to store ArrayList.
      */
     private ArrayList<DataModel> cameraList;
+
+    private ICameraSettingPresenter mCameraSettingPresenter;
     /**
      * @brief Constructor of CustomAdapter
      */
@@ -84,9 +83,10 @@ public class CustomAdapter extends ArrayAdapter<DataModel>{
                                     " is " + cb.isChecked(),
                             Toast.LENGTH_LONG).show();
 //                    notifySetting(cb.isChecked());
-//                    mCameraSettingPresenter.setSetting(cb.isChecked());
+//                    mCameraSettingPresenter.setSetting(1,true);
                     dataModel.setSelected(cb.isChecked());
 
+                    Log.d("CamSet", "Inside notifyCameraStatus:" + cb.isChecked());
                 }
 
             });
@@ -100,5 +100,10 @@ public class CustomAdapter extends ArrayAdapter<DataModel>{
         holder.name.setChecked(dataModel.isSelected());
         holder.name.setTag(dataModel);
         return convertView;
+    }
+
+    @Override
+    public boolean isEnabled(int position) {
+        return true;
     }
 }
