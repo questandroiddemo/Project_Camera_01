@@ -188,7 +188,26 @@ public class CameraFragment extends Fragment implements View.OnClickListener,ICa
         return mView;
     }
 
+    String mPreviousCamera;
 
+    public void updateCamera(){
+        hashMap = mCameraSettingPresenter.getSettings();
+
+
+        boolean a = hashMap.get("Camera Delay Settings");
+        boolean b = hashMap.get("Camera Static Guideline Settings");
+        if (a == true && b == true){
+            mHelptext.setText("Camera Delay Settings is ON"+" and Camera Static Guideline Settings is ON");
+        }else if(a == true && b == false){
+            mHelptext.setText("Camera Delay Settings is ON"+" and Camera Static Guideline Settings is OFF");
+        }else if(a == false && b == true){
+            mHelptext.setText("Camera Delay Settings is OFF"+" and Camera Static Guideline Settings is ON");
+        }
+        else {
+            mHelptext.setText("Camera Delay Settings is OFF"+" and Camera Static Guideline Settings is OFF");
+        }
+
+    }
 
     /**
      * @brief Function used to set the button click
@@ -207,12 +226,12 @@ public class CameraFragment extends Fragment implements View.OnClickListener,ICa
                 mAux.setBackgroundColor(getResources().getColor(R.color.primary));
                 mFrameLayout.setBackground(null);
                 mRotate = "null";
-                mHelptext.setText("Check entire Surrondings.");
+                mHelptext.setText(null);
                 if (mTextureView.isAvailable()) {
                     setupCamera(mTextureView.getWidth(), mTextureView.getHeight());
-                    connectCamera("1");
-                    Toast.makeText(getContext(), "camera "+mCameraId+"  connected", Toast.LENGTH_SHORT).show();
 
+                    updateCamera();
+                    connectCamera("1");
 
                 } else {
                     mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
@@ -221,7 +240,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener,ICa
                 break;
             case R.id.ffc:
                 mTitle.setText("FORWARD FACING CAMERA");
-                mHelptext.setText("Check entire Surrondings.");
+                mHelptext.setText(null);
                 mRvc.setBackgroundColor(getResources().getColor(R.color.primary));
                 mFfc.setBackgroundColor(getResources().getColor(R.color.primary1));
                 mCargo.setBackgroundColor(getResources().getColor(R.color.primary));
@@ -230,9 +249,8 @@ public class CameraFragment extends Fragment implements View.OnClickListener,ICa
                 mRotate = "fulfilled";
                 if (mTextureView.isAvailable()) {
                     setupCamera(mTextureView.getWidth(), mTextureView.getHeight());
-
+                    updateCamera();
                     connectCamera("0");
-                    Toast.makeText(getContext(), "camera "+mCameraId+"  connected", Toast.LENGTH_SHORT).show();
                 } else {
                     mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
 
@@ -275,13 +293,9 @@ public class CameraFragment extends Fragment implements View.OnClickListener,ICa
     public void onPause() {
         super.onPause();
         closeCamera();
-
         stopBackgroundThread();
-        if (mTitle.equals("REAR VIEW CAMERA")){
-            mCameraPresenter.startCamera("0");
-        }else if(mTitle.equals("FORWARD FACING CAMERA")){
-            mCameraPresenter.startCamera("1");
-        }
+        mCameraPresenter.startCamera(mCameraId);
+        Log.d("ActiveCameraID","startCamera id"+mCameraId);
 
     }
 
@@ -311,20 +325,10 @@ public class CameraFragment extends Fragment implements View.OnClickListener,ICa
         startBackgroundThread();
         if (mTextureView.isAvailable()) {
            hashMap = mCameraSettingPresenter.getSettings();
-           boolean a = hashMap.get("Camera Delay Settings");
-           boolean b = hashMap.get("Camera Static Guideline Settings");
-           if (a == true && b == true){
-               mHelptext.setText("Camera Delay Settings is ON"+" and Camera Static Guideline Settings is ON");
-           }else if(a == true && b == false){
-               mHelptext.setText("Camera Delay Settings is ON"+" and Camera Static Guideline Settings is OFF");
-           }else if(a == false && b == true){
-               mHelptext.setText("Camera Delay Settings is OFF"+" and Camera Static Guideline Settings is ON");
-           }
-           else {
-               mHelptext.setText("Camera Delay Settings is OFF"+" and Camera Static Guideline Settings is OFF");
-           }
+            mPreviousCamera = mCameraPresenter.getCamera();
+           updateCamera();
             setupCamera(mTextureView.getWidth(), mTextureView.getHeight());
-            connectCamera("1");
+            connectCamera(mPreviousCamera);
         } else {
             mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
         }
@@ -401,8 +405,8 @@ public class CameraFragment extends Fragment implements View.OnClickListener,ICa
         public void onOpened(@NonNull CameraDevice cameraDevice) {
             mCameraDevice = cameraDevice;
             startPreview();
-            mTitle.setText("REAR VIEW CAMERA");
-            mHelptext.setText("Check entire Surroundings.");
+//            mTitle.setText("REAR VIEW CAMERA");
+//            mHelptext.setText("Check entire Surroundings.");
 
         }
 
@@ -477,7 +481,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener,ICa
         CameraManager cameraManager = (CameraManager) getActivity().getSystemService(Context.CAMERA_SERVICE);
         try {
 
-            String cameraId = "0";
+            String cameraId = "1";
 
             CameraCharacteristics cameraCharacteristics = cameraManager.getCameraCharacteristics(cameraId);
             StreamConfigurationMap map = cameraCharacteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
@@ -489,13 +493,14 @@ public class CameraFragment extends Fragment implements View.OnClickListener,ICa
             if (mRotate == null){
                 cameraId = cameraManager.getCameraIdList()[1];
                 mCameraId = cameraId;
+                Log.d("BackCamera","open back camera"+mCameraId);
                 closeCamera();
-
             }
             else {
                 cameraId = cameraManager.getCameraIdList()[0];
                 mCameraId = cameraId;
-                mRotate = null;
+                Log.d("frontCamera","open front camera"+mCameraId);
+//                mRotate = null;
                 closeCamera();
             }
 

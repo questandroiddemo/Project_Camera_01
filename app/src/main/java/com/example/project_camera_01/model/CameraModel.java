@@ -31,4 +31,15 @@ public class CameraModel implements ICameraModel {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public String getCamera() {
+        String activeCamera = null;
+        try {
+            activeCamera = mServiceCameraInterface.getCamera();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return activeCamera;
+    }
 }

@@ -1,5 +1,7 @@
 package com.example.project_camera_01.presenter;
 
+import android.util.Log;
+
 import com.example.project_camera_01.model.CameraModel;
 import com.example.project_camera_01.model.ICameraModel;
 import com.example.project_camera_01.view.CameraFragment;
@@ -12,12 +14,18 @@ public class CameraPresenter implements ICameraPresenter{
    ICameraModel mCameraModel;
 
     public CameraPresenter(ICameraView cameraView) {
-        mCameraView = cameraView;
+        this.mCameraView = cameraView;
         mCameraModel = new CameraModel(this);
     }
 
     @Override
     public void startCamera(String camId) {
-      mCameraModel.startCamera(camId);
+        Log.d("BTSSTAY","started camera"+camId);
+        mCameraModel.startCamera(camId);
+    }
+
+    @Override
+    public String getCamera() {
+        return mCameraModel.getCamera();
     }
 }
