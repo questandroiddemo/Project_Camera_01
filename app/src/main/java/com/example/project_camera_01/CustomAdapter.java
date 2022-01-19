@@ -9,16 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-import com.example.project_camera_01.common.CameraConstants;
-import com.example.project_camera_01.common.CameraConstants.*;
-import com.example.project_camera_01.model.ICameraSettingModel;
-import com.example.project_camera_01.presenter.ICameraSettingPresenter;
-import com.example.project_camera_01.view.ICameraSettingView;
-
 import java.util.ArrayList;
 
 public class CustomAdapter extends ArrayAdapter<DataModel>{

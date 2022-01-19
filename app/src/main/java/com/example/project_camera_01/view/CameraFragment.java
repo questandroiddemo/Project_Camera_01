@@ -30,11 +30,9 @@ import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.os.Build;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.util.Log;
@@ -49,16 +47,11 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.example.cameraserviceinterface.CamConstants;
 import com.example.project_camera_01.R;
 import com.example.project_camera_01.presenter.CameraPresenter;
 import com.example.project_camera_01.presenter.CameraSettingPresenter;
 import com.example.project_camera_01.presenter.ICameraPresenter;
 import com.example.project_camera_01.presenter.ICameraSettingPresenter;
-import com.example.project_camera_01.presenter.IMainPresenter;
-import com.example.project_camera_01.presenter.MainPresenter;
-import com.example.cameraserviceinterface.CamConstants.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -541,8 +534,6 @@ public class CameraFragment extends Fragment implements View.OnClickListener,ICa
             int rotatedWidth = width;
             int rotatedHeight = height;
             mPreviewSize = chooseOptimalSize(map.getOutputSizes(SurfaceTexture.class), rotatedWidth, rotatedHeight);
-
-
             if (mRotate == null){
                 cameraId = cameraManager.getCameraIdList()[1];
                 mCameraId = cameraId;
@@ -556,9 +547,6 @@ public class CameraFragment extends Fragment implements View.OnClickListener,ICa
                 mRotate = null;
                 closeCamera();
             }
-
-
-
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }

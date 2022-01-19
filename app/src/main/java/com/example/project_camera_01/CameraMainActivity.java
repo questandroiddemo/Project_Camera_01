@@ -10,13 +10,8 @@ package com.example.project_camera_01;
 
 
 import androidx.appcompat.app.AppCompatActivity;
-
-
 import android.os.Bundle;
-
 import com.example.project_camera_01.view.MainFragment;
-
-
 /**
  * @brief Implementation for CameraMainActivity class.
  * CameraMainActivity is the entry point to the application which extends AppCompatActivity.

@@ -27,22 +27,9 @@ public class CameraSettingModel implements ICameraSettingModel{
     private ICameraSettingPresenter mCameraSettingPresenter;
 
     /**
-     * variable to store object of CameraServiceInterface.
-     */
-    private CameraServiceInterface mCameraServiceInterface;
-
-    /**
      * variable to store object of IBaseAidlInterface.
      */
     private IBaseAidlInterface mBaseAidlInterface;
-
-    /**
-     * variable to store object of ICameraPresenter.
-     */
-    private IMainPresenter mCameraPresenter;
-
-   private ConnectUtil mConnectUtil = new ConnectUtil();
-
     /**
      * @brief Constructor of CameraSettingModel
      */

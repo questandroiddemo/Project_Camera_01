@@ -4,9 +4,7 @@ import android.util.Log;
 
 import com.example.project_camera_01.model.CameraSettingModel;
 import com.example.project_camera_01.model.ICameraSettingModel;
-import com.example.project_camera_01.view.CameraFragment;
 import com.example.project_camera_01.view.ICameraSettingView;
-
 import java.util.HashMap;
 
 public class CameraSettingPresenter implements ICameraSettingPresenter{

@@ -2,11 +2,8 @@ package com.example.project_camera_01.presenter;
 
 import android.content.Context;
 import android.util.Log;
-
-
 import com.example.project_camera_01.model.MainModel;
 import com.example.project_camera_01.model.IMainModel;
-import com.example.project_camera_01.view.CameraFragment;
 import com.example.project_camera_01.view.ICameraView;
 import com.example.project_camera_01.view.IMainView;
 
@@ -48,9 +45,5 @@ public class MainPresenter implements IMainPresenter {
     public void updateBindStatus(int bindStatus) {
         mCameraView.updateBindStatus(bindStatus);
         Log.d("CameraService","OnStart");
-
-
     }
-
-
 }

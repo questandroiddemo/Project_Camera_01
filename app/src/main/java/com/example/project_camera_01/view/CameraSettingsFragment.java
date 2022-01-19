@@ -3,7 +3,6 @@ package com.example.project_camera_01.view;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,16 +10,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.ListView;
-import android.widget.Toast;
-
 import com.example.project_camera_01.CustomAdapter;
 import com.example.project_camera_01.DataModel;
 import com.example.project_camera_01.R;
-import com.example.project_camera_01.common.CameraConstants;
-import com.example.project_camera_01.model.ConnectUtil;
 import com.example.project_camera_01.presenter.CameraSettingPresenter;
 import com.example.project_camera_01.presenter.ICameraSettingPresenter;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -111,7 +105,6 @@ public class CameraSettingsFragment extends Fragment implements ICameraSettingVi
         if (called) return;
         called = true;
         displayListView();
-
     }
 
     HashMap<String, Boolean> hashMap = new HashMap<>();
@@ -134,7 +127,4 @@ public class CameraSettingsFragment extends Fragment implements ICameraSettingVi
             }
         });
     }
-
-
-
 }

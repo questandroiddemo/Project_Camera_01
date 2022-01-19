@@ -11,20 +11,16 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
-
 import com.example.project_camera_01.R;
 import com.example.project_camera_01.VpAdapter;
 import com.example.project_camera_01.presenter.MainPresenter;
 import com.example.project_camera_01.presenter.IMainPresenter;
 import com.google.android.material.tabs.TabLayout;
-
 import static com.example.project_camera_01.common.CameraConstants.BIND_SUCCESS;
 
 
@@ -66,15 +62,11 @@ public class MainFragment extends Fragment implements IMainView {
                              Bundle savedInstanceState) {
 
         v=inflater.inflate(R.layout.fragment_main, container, false);
-         mCameraPresenter=new MainPresenter(this);
-         mCameraPresenter.initialize(getContext());
-
+        mCameraPresenter=new MainPresenter(this);
+        mCameraPresenter.initialize(getContext());
         tabLayout = (TabLayout) v.findViewById(R.id.tablayout);
         viewPager = (ViewPager) v.findViewById(R.id.viewpager);
-
         return v;
-
-
     }
 
     /**

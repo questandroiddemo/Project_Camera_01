@@ -10,6 +10,4 @@ public interface IMainModel {
      * @param context : context
      */
     void initialize(Context context);
-
-
 }
