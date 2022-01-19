@@ -56,19 +56,13 @@ public class CameraSettingModel implements ICameraSettingModel{
         } catch (RemoteException e) {
             e.printStackTrace();
         }
-        Log.d("HMI1","mBaseAidl"+mBaseAidlInterface);
-        Log.d("HMI2", "mServiceInterface"+mServiceCameraInterface);
     }
 
     private ICameraListener mCameraListener = new ICameraListener.Stub() {
         @Override
         public void notifyCameraSetting(String setId, boolean status) throws RemoteException {
-            Log.d("CameraSetting", "Inside notifyCameraStatus:" + status);
-
             mCameraSettingPresenter.notifyCameraSetting(setId,status);
-
         }
-
     };
     /**
      * @brief Method to set the value of setting.

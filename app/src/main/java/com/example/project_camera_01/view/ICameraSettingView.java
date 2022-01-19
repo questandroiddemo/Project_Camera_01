@@ -4,11 +4,9 @@ import java.util.HashMap;
 
 public interface ICameraSettingView {
 
-
-//    /**
-//     * @brief Method to set the value of setting.
-//     * @param status : status of setting.
-//     */
-//     void setSetting(boolean status);
+      /**
+       *  @brief : function used to notify status to the HMI from service.
+       *
+       */
       void notifyCameraSetting(String setId,boolean status);
 }

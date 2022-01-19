@@ -72,13 +72,6 @@ public class MainFragment extends Fragment implements IMainView {
         tabLayout = (TabLayout) v.findViewById(R.id.tablayout);
         viewPager = (ViewPager) v.findViewById(R.id.viewpager);
 
-//        tabLayout.setupWithViewPager(viewPager);
-//
-//        VpAdapter vpAdapter = new VpAdapter(getActivity().getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-//        vpAdapter.addFragment(new CameraFragment(),"Camera");
-//        vpAdapter.addFragment(new CameraSettingsFragment(),"Camera settings");
-//        viewPager.setAdapter(vpAdapter);
-
         return v;
 
 
@@ -109,23 +102,4 @@ public class MainFragment extends Fragment implements IMainView {
             Toast.makeText(getContext(), "Loading...", Toast.LENGTH_LONG).show();
         }
     }
-
-
-//    /**
-//     * @brief Method to notify camera status.
-//     * @param status : status of camera.
-//     */
-//    @Override
-//    public void notifyCameraStatus(boolean status) {
-//        getActivity().runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                if (status) {
-//                    Toast.makeText(getContext(), "Camera started", Toast.LENGTH_LONG).show();
-//                }
-//                else
-//                    Toast.makeText(getContext(), "Camera stopped" , Toast.LENGTH_LONG).show();
-//            }
-//        });
-//    }
 }

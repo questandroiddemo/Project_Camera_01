@@ -28,8 +28,6 @@ public class CustomAdapter extends ArrayAdapter<DataModel>{
      * variable to store ArrayList.
      */
     private ArrayList<DataModel> cameraList;
-
-    private ICameraSettingPresenter mCameraSettingPresenter;
     /**
      * @brief Constructor of CustomAdapter
      */
@@ -82,8 +80,6 @@ public class CustomAdapter extends ArrayAdapter<DataModel>{
                             ""+dataModel.getCode() + cb.getText() +
                                     " is " + cb.isChecked(),
                             Toast.LENGTH_LONG).show();
-//                    notifySetting(cb.isChecked());
-//                    mCameraSettingPresenter.setSetting(1,true);
                     dataModel.setSelected(cb.isChecked());
 
                     Log.d("CamSet", "Inside notifyCameraStatus:" + cb.isChecked());

@@ -101,7 +101,10 @@ public class CameraSettingsFragment extends Fragment implements ICameraSettingVi
         });
 
     }
-
+    /**
+     *  @brief : function used to enters the Resumed state,
+     *
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -112,6 +115,10 @@ public class CameraSettingsFragment extends Fragment implements ICameraSettingVi
     }
 
     HashMap<String, Boolean> hashMap = new HashMap<>();
+    /**
+     *  @brief : function used to notify status to the HMI from service.
+     *
+     */
     @Override
     public void notifyCameraSetting(String setId, boolean status) {
         getActivity().runOnUiThread(new Runnable() {

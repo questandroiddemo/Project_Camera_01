@@ -137,11 +137,18 @@ public class CameraFragment extends Fragment implements View.OnClickListener,ICa
      */
 
     private Size mPreviewSize;
-
+    /**
+     * variable to store ICameraSettingPresenter object.
+     */
     ICameraSettingPresenter mCameraSettingPresenter;
+    /**
+     * variable to store ICameraPresenter object.
+     */
     ICameraPresenter mCameraPresenter;
-    IMainPresenter mMainPresenter;
-
+    /**
+     * variable to store HashMap object.
+     */
+    HashMap<String,Boolean> hashMap;
 
     /**
      * variable to store a value which is used for specifying the camera (front and back) based on its value.
@@ -155,9 +162,6 @@ public class CameraFragment extends Fragment implements View.OnClickListener,ICa
      * @param savedInstanceState :  Object of Bundle
      * @return
      */
-    HashMap<String,Boolean> hashMap;
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -184,8 +188,6 @@ public class CameraFragment extends Fragment implements View.OnClickListener,ICa
         mFrameLayout = mView.findViewById(R.id.frameLayout);
         mFrameLayout.setRotation(-90);
         hashMap = new HashMap<String,Boolean>();
-
-
         return mView;
     }
 
@@ -193,8 +195,6 @@ public class CameraFragment extends Fragment implements View.OnClickListener,ICa
 
     public void updateCamera(){
         hashMap = mCameraSettingPresenter.getSettings();
-
-
         boolean a = hashMap.get("Camera Delay Settings");
         boolean b = hashMap.get("Camera Static Guideline Settings");
         if (a == true && b == true){
@@ -211,11 +211,14 @@ public class CameraFragment extends Fragment implements View.OnClickListener,ICa
     }
 
     /**
-     * @brief Function used to set the button click
-     * @param : v:View
+     * @brief Variable to store the camera ID.
+     *
      */
       public String camId = null;
-
+    /**
+     * @brief Method to display RVC Camera Features.
+     *
+     */
     public void getRvc(){
         mTitle.setText("REAR VIEW CAMERA");
 
@@ -239,7 +242,10 @@ public class CameraFragment extends Fragment implements View.OnClickListener,ICa
         }
 
     }
-
+    /**
+     * @brief Method to display FFC Camera Features.
+     *
+     */
     public void getFfc(){
         mTitle.setText("FORWARD FACING CAMERA");
         mHelptext.setText(null);
@@ -260,7 +266,10 @@ public class CameraFragment extends Fragment implements View.OnClickListener,ICa
 
         }
     }
-
+    /**
+     * @brief Method to display CARGO Camera Features.
+     *
+     */
     public void getCargo(){
         mTitle.setText("CARGO CAMERA");
         mHelptext.setText("Camera is unavailable");
@@ -274,7 +283,10 @@ public class CameraFragment extends Fragment implements View.OnClickListener,ICa
         mTextureView.setOpaque(false);
         mFrameLayout.setBackgroundColor(Color.BLUE);
     }
-
+    /**
+     * @brief Method to display AUX Camera Features.
+     *
+     */
     public void getAux(){
         mTitle.setText("AUX CAMERA");
         mHelptext.setText("Camera is unavailable");
@@ -288,7 +300,10 @@ public class CameraFragment extends Fragment implements View.OnClickListener,ICa
         closeCamera();
         mFrameLayout.setBackgroundColor(Color.BLUE);
     }
-
+    /**
+     * @brief Function used to set the button click
+     * @param : v:View
+     */
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
